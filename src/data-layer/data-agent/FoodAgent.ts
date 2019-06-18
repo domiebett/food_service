@@ -20,4 +20,23 @@ export class FoodAgent {
     async getAllFood(): Promise<Food[]> {
         return await this.foodRepository.find();
     }
+
+    async getFoodById(foodId: number): Promise<Food> {
+        return await this.foodRepository.findOneOrFail(foodId);
+    }
+
+    async deleteFood(foodId: number): Promise<Food> {
+        const food = await this.foodRepository.findOneOrFail(foodId);
+        return await this.foodRepository.remove(food);
+    }
+
+    async editFood(foodId: number, requestBody: any): Promise<Food> {
+        const food = await this.foodRepository.findOneOrFail(foodId);
+
+        for(let key in requestBody) {
+            food[key] = requestBody[key];
+        }
+
+        return await this.foodRepository.save(food);
+    }
 }
