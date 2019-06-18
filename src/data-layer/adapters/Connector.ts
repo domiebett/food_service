@@ -11,7 +11,7 @@ export class Connector {
         process.on('SIGINT', async () => {
             await connection.close();
             await process.exit(0);
-        })
+        });
 
         return connection;
     }
