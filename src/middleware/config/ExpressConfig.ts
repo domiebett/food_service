@@ -15,6 +15,9 @@ export class ExpressConfig {
         this.setUpControllers();
     }
 
+    /**
+     * Sets up routing-controllers
+     */
     setUpControllers() {
         const controllersPath = path.resolve('build', 'service-layer/controllers')
         useExpressServer(this.app, {
