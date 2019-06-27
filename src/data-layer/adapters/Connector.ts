@@ -5,14 +5,11 @@ export class Connector {
         Connector.connect();
     }
 
+    /**
+     * Creates a connection to the database and closes connection
+     * on app exit
+     */
     public static async connect() {
-        const connection = await createConnection();
-
-        process.on('SIGINT', async () => {
-            await connection.close();
-            await process.exit(0);
-        });
-
-        return connection;
+        return await createConnection();
     }
 }

@@ -7,22 +7,25 @@
       "db": "typeorm",
       "clean": "rimraf build",
       "compile": "tsc",
-      "start": "npm run clean && npm run compile && node build/index.js",
+      "start": "npm run clean && npm run compile && NODE_DEBUG=request node build/index.js",
       "start_local": "ts-node src/index.ts"
    },
    "keywords": [],
    "author": "",
    "license": "ISC",
    "dependencies": {
+      "@types/eureka-js-client": "^4.4.2",
       "body-parser": "^1.19.0",
       "config": "^3.1.0",
       "cors": "^2.8.5",
+      "eureka-js-client": "^4.5.0",
       "express": "^4.17.1",
       "mysql2": "^1.6.5",
       "reflect-metadata": "^0.1.10",
       "rimraf": "^2.6.3",
       "routing-controllers": "^0.7.7",
-      "typeorm": "0.2.18"
+      "typeorm": "0.2.18",
+      "winston": "^3.2.1"
    },
    "devDependencies": {
       "@types/body-parser": "^1.17.0",

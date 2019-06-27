@@ -6,7 +6,7 @@ services:
     restart: always
     ports:
       - "3001:3000"
-    links:
+    depends_on:
       - food_service_db
   food_service_db:
     container_name: food_service_db

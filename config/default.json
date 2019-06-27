@@ -1,5 +1,12 @@
 {
     "express": {
         "port": 3000
+    },
+    "app": {
+        "name": "budget_food_service"
+    },
+    "eureka": {
+        "port": 9091,
+        "address": "eureka_server"
     }
 }

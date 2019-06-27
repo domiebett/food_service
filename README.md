@@ -1,4 +1,4 @@
-# Awesome Project Build with TypeORM
+# Food Service
 
 Steps to run this project:
 
