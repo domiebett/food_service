@@ -1,15 +1,19 @@
-import * as http from 'http';
+import * as http from 'http2';
 import * as config from 'config';
+import * as spdy from 'spdy';
+import * as path from 'path';
+import * as fs from 'fs';
 import { ExpressConfig } from './ExpressConfig';
 import { Eureka } from 'eureka-js-client';
 import { Connection } from 'typeorm';
 import { Connector } from '../../data-layer/adapters/Connector';
 import { logger } from '../common/Logging';
+import { fstat } from 'fs';
 
 export class Application {
     private express: ExpressConfig;
     private connection: Connection;
-    private server: http.Server;
+    private server: http.Http2Server;
     private client: Eureka;
     private port: number;
 
@@ -43,10 +47,15 @@ export class Application {
      * Start up express server
      */
     private async serveExpressApp() {
-        const port = await config.get('express.port');
+        const options = await this.fetchSslConfigFiles();
 
-        return await this.express.app.listen(port, () => {
-            logger.info(`App started on port ${port}`);
+        return await spdy.createServer(options, this.express.app).listen(this.port, (error: any) => {
+            if (error) {
+                logger.error('Failed to start server with ssl', error);
+                return process.exit(1);
+            } else {
+                logger.info(`Server started on port ${this.port}`);
+            }
         });
     }
 
@@ -88,6 +97,17 @@ export class Application {
         });
 
         return await client;
+    }
+
+    /**
+     * Get the ssl key and certificate
+     */
+    private async fetchSslConfigFiles() {
+        const certsPath = path.resolve('certs');
+        return await {
+            key: fs.readFileSync(certsPath + '/server.key'),
+            cert: fs.readFileSync(certsPath + '/server.crt')
+        };
     }
 
     /**
