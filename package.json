@@ -15,7 +15,6 @@
    "author": "",
    "license": "ISC",
    "dependencies": {
-      "@types/eureka-js-client": "^4.4.2",
       "body-parser": "^1.19.0",
       "config": "^3.1.0",
       "cors": "^2.8.5",
@@ -30,6 +29,7 @@
       "winston": "^3.2.1"
    },
    "devDependencies": {
+      "@types/eureka-js-client": "^4.4.2",
       "@types/body-parser": "^1.17.0",
       "@types/config": "0.0.34",
       "@types/cors": "^2.8.5",
