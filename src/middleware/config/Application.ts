@@ -45,21 +45,8 @@ export class Application {
     }
 
     /**
-     * Start up express server
+     * Serve express app
      */
-    private async serveExpressApp() {
-        const options = await this.fetchSslConfigFiles();
-
-        return await spdy.createServer(options, this.express.app).listen(this.port, (error: any) => {
-            if (error) {
-                logger.error('Failed to start server with ssl', error);
-                return process.exit(1);
-            } else {
-                logger.info(`Server started on port ${this.port}`);
-            }
-        });
-    }
-
     private async serveHttpExpressApp() {
         return await this.express.app.listen(this.port, (error: any) => {
             if (error) {
