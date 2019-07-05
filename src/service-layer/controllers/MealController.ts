@@ -2,7 +2,6 @@ import { JsonController, Get, Res, Post, Body, Put, Param, Delete } from 'routin
 import { Response } from 'express';
 import { MealAgent, FoodAgent } from '../../data-layer/data-agent';
 import { MealType } from '../../data-layer/entity';
-import { resolve } from 'dns';
 
 @JsonController('/meals')
 export class MealController {

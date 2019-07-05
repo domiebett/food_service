@@ -3,10 +3,10 @@
         "port": 3000
     },
     "app": {
-        "name": "budget_food_service"
+        "name": "food-service"
     },
     "eureka": {
         "port": 9091,
-        "address": "eureka_server"
+        "address": "eureka"
     }
 }
