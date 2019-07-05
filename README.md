@@ -14,6 +14,7 @@ Once you have git and docker installed, and the docker daemon is running, you ca
 Go to [this link](https://github.com/domiebett/budget_app), and follow the instructions on the README.
 
 ### Running it individually
+**NB** Please note that this might run into errors while registering to eureka due to the unavailability of the eureka container. If you have your own instance of eureka served up, you can set that in the `config/default.json` file.
 
 Clone the project repository.
 > $ git clone https://github.com/domiebett/food_service
