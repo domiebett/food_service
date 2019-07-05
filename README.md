@@ -16,7 +16,7 @@ Go to [this link](https://github.com/domiebett/budget_app), and follow the instr
 ### Running it individually
 
 Clone the project repository.
-> $ git clone https://github.com/domiebett/food-service
+> $ git clone https://github.com/domiebett/food_service
 
 Check out into the project folder.
 > $ cd food-service
