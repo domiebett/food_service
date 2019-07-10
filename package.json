@@ -7,20 +7,23 @@
       "db": "typeorm",
       "clean": "rimraf build",
       "compile": "tsc",
-      "start": "npm run clean && npm run compile && node build/index.js",
-      "start_debug": "npm run clean && npm run compile && NODE_DEBUG=request node build/index.js",
+      "start": "npm run clean && npm run compile && pm2-runtime start build/index.js",
+      "start_debug": "npm run clean && npm run compile && NODE_DEBUG=request pm2-runtime start build/index.js",
       "start_local": "ts-node src/index.ts"
    },
    "keywords": [],
    "author": "",
    "license": "ISC",
    "dependencies": {
+      "@bit/domiebett.budget_app.ip-resolver": "^1.0.0",
+      "@bit/domiebett.budget_app.logging": "^1.0.0",
       "body-parser": "^1.19.0",
       "config": "^3.1.0",
       "cors": "^2.8.5",
       "eureka-js-client": "^4.5.0",
       "express": "^4.17.1",
       "mysql2": "^1.6.5",
+      "pm2": "^3.5.1",
       "reflect-metadata": "^0.1.10",
       "rimraf": "^2.6.3",
       "routing-controllers": "^0.7.7",
@@ -38,5 +41,12 @@
       "@types/spdy": "^3.4.4",
       "ts-node": "3.3.0",
       "typescript": "3.3.3333"
+   },
+   "bit": {
+      "env": {
+         "compiler": "bit.envs/compilers/typescript@3.0.5"
+      },
+      "componentsDefaultDirectory": "components/{name}",
+      "packageManager": "npm"
    }
 }

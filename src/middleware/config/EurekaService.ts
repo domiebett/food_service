@@ -1,6 +1,6 @@
 import * as config from 'config';
 import { Eureka } from 'eureka-js-client';
-import { IpResolver } from '../common/IpResolver';
+import { IpResolver } from '@bit/domiebett.budget_app.ip-resolver';
 
 export class EurekaService {
     private static _client: Eureka;
