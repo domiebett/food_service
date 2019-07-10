@@ -1,10 +1,6 @@
 # Food Service
 
-<<<<<<< HEAD
 This is a service designed to keep a repository of all foods and their prices. It is intended to help create meals and evaluate their total price.
-=======
-This is an application designed to keep a repository of all foods and their prices. It is intended to help create meals and evaluate their total price.
->>>>>>> reorganise project
 
 ## Running this application.
 
