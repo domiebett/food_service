@@ -5,10 +5,10 @@ import * as http2 from 'http2';
 import * as config from 'config';
 import { Connection } from 'typeorm';
 import { Eureka } from 'eureka-js-client';
-import { logger } from '../common/Logging';
 import { EurekaService } from './EurekaService';
 import { ExpressConfig } from './ExpressConfig';
 import { Connector } from '../../data-layer/adapters/Connector';
+import { logger } from '@bit/domiebett.budget_app.logging';
 
 export class Application {
     private express: ExpressConfig;
@@ -31,7 +31,7 @@ export class Application {
         this.connection = await this.createDatabaseConnection();
         // this.server = await this.serveExpressApp();
         this.server = await this.serveHttpExpressApp();
-        this.client = await this.setUpEurekaRetry();
+        this.client = await this.setUpEureka();
 
         await process.on('SIGINT', await this.closeConnections);
     }
@@ -56,19 +56,6 @@ export class Application {
                 logger.info(`Server started on port ${this.port}`);
             }
         });
-    }
-
-    private async setUpEurekaRetry(timeout = 40000) {
-        await logger.info('Waiting for eureka to boot up.');
-
-        return await setTimeout(async () => {
-            try {
-                return await this.setUpEureka();
-            } catch(exception) {
-                await logger.info(`Reconnecting to eureka in ${(timeout * 2)/1000} seconds`);
-                return await this.setUpEurekaRetry(timeout * 2);
-            }
-        }, timeout);
     }
 
     /**
