@@ -17,6 +17,15 @@ export class MealAgent {
     }
 
     /**
+     * Get multiple meals using their ids
+     * @param mealIds - the ids of the meals to retrieve
+     * @return { Promise<Meal[]>}
+     */
+    async getMealsWithIds(mealIds: number[]): Promise<Meal[]> {
+        return await this.mealRepository.findByIds(mealIds, { relations: ['foods']});
+    }
+
+    /**
      * Add meals. Can also add foods on creation of meals
      * @param requestBody - body of a request
      * @param { Food[] } foods - array of food objects

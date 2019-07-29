@@ -1,4 +1,4 @@
-import { JsonController, Get, Res, Post, Body, Put, Param, Delete } from 'routing-controllers';
+import { JsonController, Get, Res, Post, Body, Put, Param, QueryParam, Delete } from 'routing-controllers';
 import { Response } from 'express';
 import { MealAgent, FoodAgent } from '../../data-layer/data-agent';
 import { MealType } from '../../data-layer/entity';
@@ -14,8 +14,14 @@ export class MealController {
     }
 
     @Get()
-    async getAllMeals(@Res() res: Response) {
-        const meals = await this.mealAgent.getMeals();
+    async getAllMeals(@QueryParam('mealIds') mealIds: string, @Res() res: Response) {
+        let meals = [];
+        if (mealIds) {
+            let ids = mealIds.split(',').map((id) => parseInt(id));
+            meals = await this.mealAgent.getMealsWithIds(ids);
+        } else {
+            meals = await this.mealAgent.getMeals();
+        }
         return res.status(200).json({ meals });
     }
 
