@@ -20,7 +20,7 @@ export class FoodController {
 
     @Post()
     async addFood(@Body() requestBody: IFood, @Req() req: Request, @Res() res: Response) {
-        requestBody.type = FoodType[requestBody.type];
+        // requestBody.type = FoodType[requestBody.type];
 
         const food = await this.foodAgent.addFood(requestBody);
 
