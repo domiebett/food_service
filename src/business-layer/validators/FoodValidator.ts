@@ -1,34 +1,23 @@
 import { IFood, FoodType } from "../../data-layer/entity";
+import { ValidationException } from '../exceptions';
+import { validate } from 'class-validator';
 
 export class FoodValidator {
-    static errorResponse = {fields: {}, error: 'ValidationError'};
 
     /**
      * Base function for food validation
      * @param foodItem - request body for food
      */
-    static async validate(foodItem: IFood) {
-        FoodValidator.errorResponse.fields = {};
-        await FoodValidator.validateFoodType(foodItem.type);
+    static async validate(food: IFood) {
+        const errors = await validate(food);
+        let fields = {};
 
-        if (Object.keys(FoodValidator.errorResponse.fields).length > 0) {
-            throw FoodValidator.errorResponse;
+        for (let error of errors) {
+            fields[error.property] = error.constraints;
         }
-    }
 
-    /**
-     * Validates that the type of meal is accepted
-     * @param foodType - String in the form of food type.
-     */
-    static async validateFoodType(foodType: string) {
-        const foodTypes = Object.values(FoodType);
-        if (! (await foodTypes.includes(foodType))) {
-            const foodTypes = Object.values(FoodType);
-            const stringifiedFoodTypes = foodTypes.join(', ');
-            const message = `Invalid Food Types. Only ${stringifiedFoodTypes} allowed`;
-            return FoodValidator.errorResponse.fields['type'] = {
-                message: message
-            }
+        if (Object.keys(fields).length > 0) {
+            throw new ValidationException(fields);
         }
     }
 }

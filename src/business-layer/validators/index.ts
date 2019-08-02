@@ -1,1 +1,1 @@
-export { FoodValidator } from './FoodRequestValidator';
+export { FoodValidator } from './FoodValidator';

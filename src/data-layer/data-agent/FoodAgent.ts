@@ -16,12 +16,12 @@ export class FoodAgent {
      * @return {Promise<Food>}
      */
     async addFood(requestBody: IFood): Promise<Food> {
-        await this.validate(requestBody);
-
         let food = new Food();
         food.name = requestBody.name;
         food.price = requestBody.price;
         food.type = requestBody.type;
+
+        await this.validate(food);
 
         return await this.foodRepository.save(food);
     }
