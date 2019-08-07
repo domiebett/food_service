@@ -1,5 +1,13 @@
 import { Entity, PrimaryGeneratedColumn, Column, JoinTable, ManyToMany } from 'typeorm';
 import { Food } from './Food';
+import { IsIn } from 'class-validator';
+
+export enum MealType {
+    Dinner = 'Dinner',
+    Lunch = 'Lunch',
+    Breakfast = 'Breakfast',
+    Snack = 'Snack'
+}
 
 @Entity()
 export class Meal {
@@ -10,16 +18,10 @@ export class Meal {
         type: 'varchar',
         length: '20'
     })
+    @IsIn(Object.values(MealType))
     type: MealType;
 
     @ManyToMany(type => Food, food => food.meals)
     @JoinTable()
     foods: Food[];
-}
-
-export enum MealType {
-    Dinner = 'Dinner',
-    Lunch = 'Lunch',
-    Breakfast = 'Breakfast',
-    Snack = 'Snack'
 }
