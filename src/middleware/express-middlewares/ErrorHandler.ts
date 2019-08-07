@@ -1,5 +1,6 @@
 import { Middleware, ExpressErrorMiddlewareInterface, HttpError } from 'routing-controllers';
 import { Response } from 'express';
+import { ValidationException } from '../../business-layer/exceptions';
 
 @Middleware({type: 'after'})
 export class ErrorHandler implements ExpressErrorMiddlewareInterface {
@@ -15,6 +16,10 @@ export class ErrorHandler implements ExpressErrorMiddlewareInterface {
             responseObject.name = error.name || 'Internal Server Error',
             responseObject.message = error.message || 'An error occured on our systems. We are working to fix this.';
             responseObject.status = this.errorStatus(error);
+
+            if (error instanceof ValidationException) {
+                responseObject.constraints = error.constraints;
+            }
         }
         responseObject.error = true;
 

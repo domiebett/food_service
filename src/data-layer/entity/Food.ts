@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, BeforeInsert } from 'typeorm';
-import { IsIn } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import { IsIn, MinLength } from 'class-validator';
 import { Meal } from './Meal';
 
 
@@ -21,6 +21,7 @@ export class Food {
         length: 150,
         unique: true
     })
+    @MinLength(2)
     name: string;
 
     @Column('double')

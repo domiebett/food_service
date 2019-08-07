@@ -1,15 +1,14 @@
-import { IFood, FoodType } from "../../data-layer/entity";
 import { ValidationException } from '../exceptions';
 import { validate } from 'class-validator';
 
-export class FoodValidator {
+export class Validator {
 
     /**
-     * Base function for food validation
-     * @param foodItem - request body for food
+     * Base function to handle all validation
+     * @param entity - instance of an entity with properties set
      */
-    static async validate(food: IFood) {
-        const errors = await validate(food);
+    static async validate(entity) {
+        const errors = await validate(entity);
         let fields = {};
 
         for (let error of errors) {
