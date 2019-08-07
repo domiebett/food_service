@@ -8,6 +8,8 @@ services:
       - "3001:3000"
     depends_on:
       - food_service_db
+    networks:
+      - budget_app_network
   food_service_db:
     container_name: food_service_db
     image: mysql:8.0
@@ -18,3 +20,8 @@ services:
       MYSQL_DATABASE: food_service
     ports:
       - "3307:3306"
+    networks:
+      - budget_app_network
+networks:
+  budget_app_network:
+    external: true

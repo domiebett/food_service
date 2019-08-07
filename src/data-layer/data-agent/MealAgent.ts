@@ -1,11 +1,14 @@
 import { Meal, Food } from './../entity';
 import { getConnection, Repository } from 'typeorm';
+import { Validator } from '../../business-layer/validators';
 
 export class MealAgent {
     private mealRepository: Repository<Meal>;
+    private validate: Function;
 
     constructor() {
         this.mealRepository = getConnection().getRepository(Meal);
+        this.validate = Validator.validate;
     }
 
     /**
@@ -34,6 +37,7 @@ export class MealAgent {
     async addMeal(requestBody, foods: Food[] = []): Promise<Meal> {
         const meal = new Meal();
         meal.type = requestBody.type;
+        await this.validate(meal);
         
         if (foods && foods.length > 0) {
             meal.foods = foods;
@@ -57,6 +61,7 @@ export class MealAgent {
         for (let key in requestBody) {
             meal[key] = requestBody[key];
         }
+        await this.validate(meal);
 
         if (foods && foods.length > 0) {
             meal.foods = foods;

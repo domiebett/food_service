@@ -1,12 +1,13 @@
 import { getConnection, Repository } from 'typeorm';
 import { Food, IFood } from '../entity/Food';
-import { userInfo } from 'os';
-
+import { Validator } from '../../business-layer/validators';
 export class FoodAgent {
     private foodRepository: Repository<Food>;
+    private validate: Function;
 
     constructor() {
         this.foodRepository = getConnection().getRepository(Food);
+        this.validate = Validator.validate;
     }
 
     /**
@@ -19,6 +20,8 @@ export class FoodAgent {
         food.name = requestBody.name;
         food.price = requestBody.price;
         food.type = requestBody.type;
+
+        await this.validate(food);
 
         return await this.foodRepository.save(food);
     }
@@ -62,6 +65,8 @@ export class FoodAgent {
         for(let key in requestBody) {
             food[key] = requestBody[key];
         }
+
+        await this.validate(food);
 
         return await this.foodRepository.save(food);
     }
