@@ -7,10 +7,11 @@
       "db": "typeorm",
       "clean": "rimraf build",
       "compile": "tsc",
-      "start": "npm run clean && npm run compile && pm2-runtime start build/index.js",
-      "start_debug": "npm run clean && npm run compile && NODE_DEBUG=request pm2-runtime start build/index.js",
+      "start": "npm run clean && npm run compile && pm2-runtime start build/src/index.js",
+      "start_debug": "npm run clean && npm run compile && NODE_DEBUG=request pm2-runtime start build/src/index.js",
       "start_local": "ts-node src/index.ts",
-      "test": "mocha --timeout 10000"
+      "test": "mocha -r ts-node/register tests/**/*.spec.ts",
+      "docker_test": "docker exec -it food_service npm test"
    },
    "keywords": [],
    "author": "",
@@ -34,12 +35,18 @@
    },
    "devDependencies": {
       "@types/body-parser": "^1.17.0",
+      "@types/chai": "^4.1.7",
+      "@types/chai-as-promised": "^7.1.2",
       "@types/config": "0.0.34",
       "@types/cors": "^2.8.5",
       "@types/eureka-js-client": "^4.4.2",
       "@types/express": "^4.17.0",
+      "@types/mocha": "^5.2.7",
       "@types/node": "^8.10.51",
       "@types/spdy": "^3.4.4",
+      "chai": "^4.2.0",
+      "chai-as-promised": "^7.1.1",
+      "mocha": "^6.2.0",
       "ts-node": "3.3.0",
       "typescript": "3.3.3333"
    },

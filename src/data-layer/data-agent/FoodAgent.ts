@@ -5,11 +5,11 @@ export class FoodAgent {
     private foodRepository: Repository<Food>;
     private validate: Function;
 
-    constructor() {
-        this.foodRepository = getConnection().getRepository(Food);
+    constructor(repository: Repository<Food> = null) {
+        this.foodRepository = repository || getConnection().getRepository(Food);
         this.validate = Validator.validate;
     }
-
+    
     /**
      * Add food to database
      * @param {IFood} requestBody - body provided in the request

@@ -18,8 +18,12 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: food_service_password
       MYSQL_DATABASE: food_service
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
     ports:
       - "3307:3306"
+    volumes:
+      - "./docker/provision/mysql/init:/docker-entrypoint-initdb.d"
     networks:
       - budget_app_network
 networks:
