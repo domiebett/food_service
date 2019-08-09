@@ -14,7 +14,7 @@ const correctRequestObj: IFood = {
     price: 50
 };
 
-describe('Food', () => {
+describe('Food Agent', () => {
     let connection: Connection;
     let repository;
     let agent: FoodAgent;
@@ -31,7 +31,7 @@ describe('Food', () => {
         result = await agent.addFood(correctRequestObj);
     });
 
-    describe('add food', async () => {
+    describe('Add Food', async () => {
         it('should successfully add food to database', async () => {
             expect(result.id).to.be.equal(1);
             expect(result.name).to.be.equal(correctRequestObj.name);
@@ -50,7 +50,7 @@ describe('Food', () => {
         });
     });
 
-    describe('get food', async () => {
+    describe('Get Food', async () => {
         it('should get all foods successfully', async () => {
             const result = await agent.getAllFood();
             expect(result.length).to.be.equal(1);
@@ -73,7 +73,7 @@ describe('Food', () => {
         });
     });
 
-    describe('delete food', async () => {
+    describe('Delete Food', async () => {
         it('should delete food successfully', async () => {
             const result = await agent.deleteFood(1);
             expect(result.name).to.be.equal(correctRequestObj.name);
@@ -86,7 +86,7 @@ describe('Food', () => {
         });
     });
 
-    describe('update food', async() => {
+    describe('Update Food', async() => {
         it('should update food successfully', async () => {
             let result = await agent.editFood(1, {name: 'Second Sample'});
             expect(result.id).to.be.equal(1);
@@ -106,6 +106,7 @@ describe('Food', () => {
     });
 
     afterEach(async () => {
+        // drop and recreate tables
         await connection.synchronize(true);
     });
 
