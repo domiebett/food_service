@@ -18,5 +18,7 @@ export class Validator {
         if (Object.keys(fields).length > 0) {
             throw new ValidationException(fields);
         }
+
+        return true;
     }
 }

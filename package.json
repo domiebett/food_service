@@ -11,7 +11,9 @@
       "start_debug": "npm run clean && npm run compile && NODE_DEBUG=request pm2-runtime start build/src/index.js",
       "start_local": "ts-node src/index.ts",
       "test": "mocha -r ts-node/register tests/**/*.spec.ts",
-      "docker_test": "docker exec -it food_service npm test"
+      "unit_test": "mocha -r ts-node/register tests/unit/**/*.spec.ts",
+      "docker_test": "docker exec -it food_service npm test",
+      "docker_unit_test": "docker exec -it food_service npm run unit_test"
    },
    "keywords": [],
    "author": "",
