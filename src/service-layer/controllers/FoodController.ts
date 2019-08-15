@@ -5,11 +5,7 @@ import { IFood, FoodType } from '../../data-layer/entity/Food';
 
 @JsonController('/foods')
 export class FoodController {
-    private foodAgent: FoodAgent;
-
-    constructor() {
-        this.foodAgent = new FoodAgent();
-    }
+    constructor(private foodAgent: FoodAgent) { }
 
     @Get()
     async getAllFoods(@Req() req: Request, @Res() res: Response) {

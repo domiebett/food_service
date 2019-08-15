@@ -2,7 +2,8 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser'
 import * as cors from 'cors';
 import * as path from 'path';
-import { useExpressServer } from 'routing-controllers';
+import { useExpressServer, useContainer } from 'routing-controllers';
+import { Container } from 'typedi';
 
 export class ExpressConfig {
     app: express.Application;
@@ -20,6 +21,8 @@ export class ExpressConfig {
      * Sets up routing-controllers
      */
     setUpExpressServer() {
+        useContainer(Container);
+        
         const controllersPath = path.resolve('build', 'src/service-layer/controllers');
         const middlewaresPath = path.resolve('build', 'src/middleware/express-middlewares');
         return useExpressServer(this.app, {
