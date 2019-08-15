@@ -1,6 +1,6 @@
 import 'mocha';
 import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
+import * as chaiAsPromised from 'chai-as-promised';
 import { FoodAgent } from '../../../../../src/data-layer/data-agent';
 import { IFood, FoodType, Food } from '../../../../../src/data-layer/entity';
 import { Database } from '../../../../setup/Database';

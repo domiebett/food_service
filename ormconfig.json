@@ -8,16 +8,16 @@
    "synchronize": true,
    "logging": false,
    "entities": [
-      "build/data-layer/entity/**/*.js"
+      "build/src/data-layer/entity/**/*.js"
    ],
    "migrations": [
-      "build/data-layer/migration/**/*.js"
+      "build/src/data-layer/migration/**/*.js"
    ],
    "subscribers": [
-      "build/data-layer/subscriber/**/*.js"
+      "build/src/data-layer/subscriber/**/*.js"
    ],
    "cli": {
-      "entitiesDir": "build/src/data-layer/entity",
+      "entitiesDir": "src/data-layer/entity",
       "migrationsDir": "src/data-layer/migration",
       "subscribersDir": "src/data-layer/subscriber"
    }
