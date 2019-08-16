@@ -126,6 +126,12 @@ export class MealAgent {
         return await this.mealRepository.save(meal);
     }
 
+    /**
+     * Find the index of a food object in a meal
+     * @param meal - meal to check
+     * @param food - food to look for
+     * @return {Promise<number>} - index of food
+     */
     private async indexOfFood(meal: Meal, food: Food): Promise<number> {
         for(let i = 0; i < meal.foods.length; i++) {
             if (meal.foods[i].id === food.id) {

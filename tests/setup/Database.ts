@@ -1,4 +1,4 @@
-import { createConnection, getConnection } from "typeorm";
+import { createConnection, getConnection, Connection } from "typeorm";
 import { Food, Meal } from "../../src/data-layer/entity";
 
 export class Database {
@@ -6,7 +6,12 @@ export class Database {
 
     }
 
-    static async createTestConnection() {
+    /**
+     * Create a database connection to the test
+     * db for the purpose of testing.
+     * @return { Promise<Connection> }
+     */
+    static async createTestConnection(): Promise<Connection> {
         return await createConnection({
             name: 'test',
             type: 'mysql',
