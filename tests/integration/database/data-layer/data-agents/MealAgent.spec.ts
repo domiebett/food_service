@@ -5,6 +5,7 @@ import { MealAgent, FoodAgent } from '../../../../../src/data-layer/data-agent';
 import { MealType, Meal, FoodType, Food } from '../../../../../src/data-layer/entity';
 import { Database } from '../../../../setup/Database';
 import { getConnection, Connection } from 'typeorm';
+import { DatabaseConnectionService } from '../../../../../src/business-layer/services';
 
 const expect = chai.expect;
 chai.use(chaiAsPromised);
@@ -25,10 +26,8 @@ describe('Meal Agent', () => {
     before(async() => {
         connection = await Database.createTestConnection();
         await connection.synchronize();
-        let repository = await getConnection('test').getRepository(Meal);
-        let foodRepository = await getConnection('test').getRepository(Food);
-        agent = new MealAgent(repository);
-        foodAgent = new FoodAgent(foodRepository);
+        agent = new MealAgent();
+        foodAgent = new FoodAgent();
     });
 
     describe('Add Meal', () => {

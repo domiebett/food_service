@@ -8,6 +8,12 @@ services:
       - "3001:3000"
     depends_on:
       - food_service_db
+    environment:
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}
     networks:
       - budget_app_network
   food_service_db:
