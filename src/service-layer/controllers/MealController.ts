@@ -5,13 +5,10 @@ import { MealType } from '../../data-layer/entity';
 
 @JsonController('/meals')
 export class MealController {
-    private mealAgent: MealAgent;
-    private foodAgent: FoodAgent;
-
-    constructor() {
-        this.mealAgent = new MealAgent();
-        this.foodAgent = new FoodAgent();
-    }
+    constructor(
+        private mealAgent: MealAgent,
+        private foodAgent: FoodAgent
+    ) { }
 
     @Get()
     async getAllMeals(@QueryParam('mealIds') mealIds: string, @Res() res: Response) {

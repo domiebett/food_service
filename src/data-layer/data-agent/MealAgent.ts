@@ -1,13 +1,14 @@
 import { Meal, Food } from './../entity';
 import { getConnection, Repository } from 'typeorm';
 import { Validator } from '../../business-layer/validators';
+import { DatabaseConnectionService as DbConnectionService } from '../../business-layer/services';
 
 export class MealAgent {
     private mealRepository: Repository<Meal>;
     private validate: Function;
 
     constructor() {
-        this.mealRepository = getConnection().getRepository(Meal);
+        this.mealRepository = getConnection(DbConnectionService.getDbEnv()).getRepository(Meal);
         this.validate = Validator.validate;
     }
 
@@ -116,9 +117,28 @@ export class MealAgent {
     async removeFoodFromMeal(mealId: number, food: Food): Promise<Meal> {
         const meal = await this.mealRepository.findOneOrFail(mealId, {relations: ['foods']});
 
-        const foodIndex = meal.foods.indexOf(food);
-        meal.foods.splice(foodIndex, 1);
-
+        const foodIndex = await this.indexOfFood(meal, food);
+        if (foodIndex < 0) {
+            throw Error(`Food with id: ${food.id}, doesnt't exist on meal id: ${mealId}`)
+        }
+        
+        await meal.foods.splice(foodIndex, 1);
         return await this.mealRepository.save(meal);
+    }
+
+    /**
+     * Find the index of a food object in a meal
+     * @param meal - meal to check
+     * @param food - food to look for
+     * @return {Promise<number>} - index of food
+     */
+    private async indexOfFood(meal: Meal, food: Food): Promise<number> {
+        for(let i = 0; i < meal.foods.length; i++) {
+            if (meal.foods[i].id === food.id) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }
