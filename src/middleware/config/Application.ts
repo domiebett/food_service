@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import * as spdy from 'spdy';
 import * as path from 'path';
 import * as http2 from 'http2';
 import * as config from 'config';

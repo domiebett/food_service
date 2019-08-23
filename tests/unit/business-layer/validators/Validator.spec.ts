@@ -1,9 +1,8 @@
 import 'mocha';
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { Food, Meal, FoodType } from '../../../../src/data-layer/entity';
+import { Food, FoodType } from '../../../../src/data-layer/entity';
 import { Validator } from '../../../../src/business-layer/validators';
-import { ValidationException } from '../../../../src/business-layer/exceptions';
 
 const expect = chai.expect;
 chai.use(chaiAsPromised);
