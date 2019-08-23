@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -e
+
+tests/bin/wait-for-mysql
+
+time $1

@@ -10,7 +10,7 @@
       "compile_dev": "tsc -w",
       "start": "npm run clean && npm run compile && pm2-runtime start build/index.js",
       "dev": "nodemon -e ts --ignore \"./tests\" --exec \"npm run start\"",
-      "test": "NODE_ENV=test mocha -r ts-node/register tests/**/*.spec.ts",
+      "test": "NODE_ENV=test mocha --timeout 15000 -r ts-node/register tests/**/*.spec.ts",
       "unit_test": "NODE_ENV=test mocha -r ts-node/register tests/unit/**/*.spec.ts",
       "integration_test": "NODE_ENV=test mocha -r ts-node/register tests/integration/**/*.spec.ts",
       "integration_db_test": "NODE_ENV=test mocha -r ts-node/register tests/integration/database/**/*.spec.ts",

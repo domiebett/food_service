@@ -1,5 +1,5 @@
 import { createConnection, getConnection, Connection } from "typeorm";
-import { Food, Meal } from "../../src/data-layer/entity";
+import { Food, Meal } from "../../../src/data-layer/entity";
 
 export class Database {
     constructor() {

@@ -3,7 +3,7 @@ import chai = require('chai');
 import * as chaiAsPromised from 'chai-as-promised';
 import { FoodAgent } from '../../../../../src/data-layer/data-agent';
 import { IFood, FoodType } from '../../../../../src/data-layer/entity';
-import { Database } from '../../../../setup/Database';
+import { Database } from '../../../../bin/setup/Database';
 import { Connection } from 'typeorm';
 
 const expect = chai.expect
@@ -16,7 +16,6 @@ const correctRequestObj: IFood = {
 
 describe('Food Agent', () => {
     let connection: Connection;
-    let repository;
     let agent: FoodAgent;
     let result;
 
