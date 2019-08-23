@@ -1,0 +1,16 @@
+#!/bin/sh
+# wait until MySQL is really available
+maxcounter=60
+counter=1
+
+echo "Waiting for MySQL..."
+while ! mysqladmin ping -h"food_service_db" --silent; do
+    sleep 1
+    counter=`expr $counter + 1`
+    if [ $counter -gt $maxcounter ]; then
+        >&2 echo "Timeout waiting for MySQL. Failing!!"
+        exit 1
+    fi;
+done
+
+echo "MySQL is ready for connections. Proceeding."

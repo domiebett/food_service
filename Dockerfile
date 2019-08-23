@@ -6,8 +6,9 @@ WORKDIR /usr/src/app
 # install packages and setup application
 COPY package.json /usr/src/app
 RUN npm config set @bit:registry https://node.bitsrc.io
-RUN npm install
+RUN npm install --silent
 COPY . /usr/src/app
 
 EXPOSE 3000
-CMD [ "npm", "start" ]
+
+RUN apt-get update && apt-get install -y mysql-client

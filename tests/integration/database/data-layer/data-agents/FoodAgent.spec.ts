@@ -2,10 +2,9 @@ import 'mocha';
 import chai = require('chai');
 import * as chaiAsPromised from 'chai-as-promised';
 import { FoodAgent } from '../../../../../src/data-layer/data-agent';
-import { IFood, FoodType, Food } from '../../../../../src/data-layer/entity';
-import { Database } from '../../../../setup/Database';
-import { getConnection, Connection, QueryFailedError } from 'typeorm';
-import { DatabaseConnectionService } from '../../../../../src/business-layer/services';
+import { IFood, FoodType } from '../../../../../src/data-layer/entity';
+import { Database } from '../../../../bin/setup/Database';
+import { Connection } from 'typeorm';
 
 const expect = chai.expect
 chai.use(chaiAsPromised);
@@ -17,7 +16,6 @@ const correctRequestObj: IFood = {
 
 describe('Food Agent', () => {
     let connection: Connection;
-    let repository;
     let agent: FoodAgent;
     let result;
 

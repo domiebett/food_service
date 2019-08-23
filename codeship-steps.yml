@@ -1,0 +1,5 @@
+- type: parallel
+  steps:
+  - name: tests
+    service: food_service
+    command: ./tests/bin/ci "npm test -- --forceExit"

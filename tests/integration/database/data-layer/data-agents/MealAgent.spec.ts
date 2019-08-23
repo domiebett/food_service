@@ -2,10 +2,9 @@ import 'mocha';
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { MealAgent, FoodAgent } from '../../../../../src/data-layer/data-agent';
-import { MealType, Meal, FoodType, Food } from '../../../../../src/data-layer/entity';
-import { Database } from '../../../../setup/Database';
-import { getConnection, Connection } from 'typeorm';
-import { DatabaseConnectionService } from '../../../../../src/business-layer/services';
+import { MealType, FoodType } from '../../../../../src/data-layer/entity';
+import { Database } from '../../../../bin/setup/Database';
+import { Connection } from 'typeorm';
 
 const expect = chai.expect;
 chai.use(chaiAsPromised);

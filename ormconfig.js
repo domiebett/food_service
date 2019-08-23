@@ -8,13 +8,13 @@ module.exports = {
    "synchronize": true,
    "logging": false,
    "entities": [
-      "build/src/data-layer/entity/**/*.js"
+      "build/data-layer/entity/**/*.js"
    ],
    "migrations": [
-      "build/src/data-layer/migration/**/*.js"
+      "build/data-layer/migration/**/*.js"
    ],
    "subscribers": [
-      "build/src/data-layer/subscriber/**/*.js"
+      "build/data-layer/subscriber/**/*.js"
    ],
    "cli": {
       "entitiesDir": "src/data-layer/entity",

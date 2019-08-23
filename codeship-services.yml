@@ -1,0 +1,14 @@
+food_service:
+  build: .
+  links:
+    - food_service_db
+  cache: true
+food_service_db:
+  image: mysql:8.0
+  command: --default-authentication-plugin=mysql_native_password
+  restart: always
+  environment:
+    MYSQL_ROOT_PASSWORD: food_service_password
+    MYSQL_DATABASE: test
+    MYSQL_USER: test
+    MYSQL_PASSWORD: test

@@ -25,8 +25,8 @@ export class ExpressConfig {
         routeUseContainer(Container);
         ormUseContainer(Container);
 
-        const controllersPath = path.resolve('build', 'src/service-layer/controllers');
-        const middlewaresPath = path.resolve('build', 'src/middleware/express-middlewares');
+        const controllersPath = path.resolve('build', 'service-layer/controllers');
+        const middlewaresPath = path.resolve('build', 'middleware/express-middlewares');
         return useExpressServer(this.app, {
             controllers: [controllersPath + '/*.js'],
             middlewares: [middlewaresPath + '/*.js'],
