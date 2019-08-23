@@ -1,5 +1,7 @@
 # Food Service
 
+[![Codeship Status for domiebett/food_service](https://app.codeship.com/projects/78afb390-a73c-0137-2f32-5ae24cfcc022/status?branch=develop)](https://app.codeship.com/projects/361206)
+
 This is a service designed to keep a repository of all foods and their prices. It is intended to help create meals and evaluate their total price.
 
 ## Running this application.
