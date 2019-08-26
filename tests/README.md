@@ -9,3 +9,14 @@ You will need to run the tests inside a docker container to avoid additional set
 ...which is a shortcut to the command `docker exec -it food_service npm test`.
 
 More commands for testing are available in the package.json for your convenience. These enable you to run specific tests.
+
+### Running the tests using jet(codeship local test runner)
+Tests are run automatically on creation of a pull request. However, if you wish to tests that tests will work on CI locally, you can use the tool `jet`. This can be installed on a mac using the following command:
+
+> $ brew cask install codeship/taps/jet
+
+Running the tests can be done through:
+
+> $ jet steps
+
+... while inside the project root directory.
