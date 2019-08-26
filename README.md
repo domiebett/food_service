@@ -49,4 +49,4 @@ DELETE | /meals/:id/foods/:food_id | Remove a food item from a meal
 
 ## Testing
 
-[Running Unit and Integration tests](https://github.com/domiebett/food_service/tests/README.md)
+[Running Unit and Integration tests](tests/README.md)
