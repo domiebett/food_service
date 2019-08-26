@@ -13,7 +13,7 @@ This is a service designed to keep a repository of all foods and their prices. I
 Once you have git and docker installed, and the docker daemon is running, you can proceed with the following steps:
 
 ### Running the project
-**NB** Please note that this might run into errors while registering to eureka due to the unavailability of the eureka container. If you have your own instance of eureka served up, you can set that in the `config/default.json` file. Otherwise, you can find a simple eureka setup at https://github.com/domiebett/budget_app/service_discovery. You will find a docker-compose file for eureka and zuul setup.
+**NB** Please note that this might run into errors while registering to eureka due to the unavailability of the eureka container. If you have your own instance of eureka served up, you can set that in the `config/default.json` file. Otherwise, you can find a simple eureka setup at `https://github.com/domiebett/budget_app/tree/develop/service_discovery`. You will find a docker-compose file for eureka and zuul setup.
 
 Clone the project repository.
 > $ git clone https://github.com/domiebett/food_service
