@@ -1,3 +1,6 @@
+import { Service } from "typedi";
+
+@Service()
 export class DatabaseConnectionService {
     /**
      * Get the connection name for typeorm to use depending

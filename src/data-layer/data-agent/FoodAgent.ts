@@ -2,6 +2,8 @@ import { getConnection, Repository } from 'typeorm';
 import { Food, IFood } from '../entity/Food';
 import { Validator } from '../../business-layer/validators';
 import { DatabaseConnectionService as DbConnectionService } from '../../business-layer/services';
+import { Service } from 'typedi';
+@Service()
 export class FoodAgent {
     private foodRepository: Repository<Food>;
     private validate: Function;
