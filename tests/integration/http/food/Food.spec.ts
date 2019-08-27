@@ -1,7 +1,7 @@
 import 'mocha';
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import * as request from 'supertest';
+import * as req from 'supertest';
 import {Application } from 'express';
 import { ExpressConfig } from '../../../../src/middleware/config/ExpressConfig';
 import { Database } from '../../../bin/setup/Database';
@@ -16,7 +16,7 @@ describe('Food Routes Integration Tests', () => {
     let connection: Connection;
     let app: Application;
     app = new ExpressConfig().app;
-    const req = request(app);
+    const request = req(app);
 
     before(async () => {
         connection = await Database.createTestConnection();
@@ -25,7 +25,7 @@ describe('Food Routes Integration Tests', () => {
 
     describe('#GET /foods', () => {
         it('should get foods successfully', async () => {
-            const response = await req.get('/foods');
+            const response = await request.get('/foods');
             await console.log('body', response.body);
             expect(response.status).to.equal(200);
             expect(response.body).to.haveOwnProperty('foods');
