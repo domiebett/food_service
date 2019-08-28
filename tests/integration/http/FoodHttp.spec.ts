@@ -3,11 +3,11 @@ import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as req from 'supertest';
 import {Application } from 'express';
-import { ExpressConfig } from '../../../../src/middleware/config/ExpressConfig';
-import { Database } from '../../../bin/setup/Database';
+import { ExpressConfig } from '../../../src/middleware/config/ExpressConfig';
+import { Database } from '../../bin/setup/Database';
 import { Connection } from 'typeorm';
-import { FoodAgent } from '../../../../src/data-layer/data-agent';
-import * as FoodData from '../.../../../../bin/data/FoodData';
+import { FoodAgent } from '../../../src/data-layer/data-agent';
+import * as FoodData from '../../bin/data/FoodData';
 
 const expect = chai.expect;
 chai.use(chaiAsPromised);
