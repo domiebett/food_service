@@ -68,6 +68,54 @@ describe('Meal Routes Integration Tests', () => {
             let meal = await mealAgent.getMeal(1);
             expect(meal.foods).to.have.lengthOf(0);
         });
+
+        it('should reject meal with invalid type', async () => {
+            let response = await request.post('/meals').send(MealData.invalidTypeMealObj);
+            expect(response.status).to.equal(422);
+            expect(response.body.name).to.equal('Validation Error');
+        });
+    });
+
+    describe('#PUT /meals', () => {
+        beforeEach(async () => {
+            await mealAgent.addMeal(MealData.mealObj);
+        });
+
+        it('should edit a meal successfully', async () => {
+            let response = await request.put('/meals/1').send({type: 'Breakfast'});
+            expect(response.status).to.equal(201);
+            expect(response.body.meal.type).to.equal('Breakfast');
+        });
+
+        it('should reject wrong meal type on edit', async () => {
+            let response = await request.put('/meals/1').send({type: 'Wrong'});
+            expect(response.status).to.equal(422);
+            expect(response.body.name).to.equal('Validation Error');
+        });
+
+        it('should reject editing nonexistent meal', async () => {
+            let response = await request.put('/meals/2').send({});
+            expect(response.status).to.equal(404);
+            expect(response.body.name).to.equal('EntityNotFound');
+        });
+    });
+
+    describe('#DELETE /meals', () => {
+        beforeEach(async () => {
+            await mealAgent.addMeal(MealData.mealObj);
+        });
+
+        it('should delete meal successfully', async () => {
+            let response = await request.delete('/meals/1');
+            expect(response.status).to.equal(200);
+            expect(response.body.message).to.equal('Meal has been deleted successfully');
+        });
+
+        it('should reject deletion of wrong meal id', async () => {
+            let response = await request.delete('/meals/2');
+            expect(response.status).to.equal(404);
+            expect(response.body.name).to.equal('EntityNotFound');
+        });
     });
 
     afterEach(async () => {
