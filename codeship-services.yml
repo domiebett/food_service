@@ -1,5 +1,5 @@
 food_service:
-  build: .
+  build: ./tests/
   links:
     - food_service_db
   cache: true
