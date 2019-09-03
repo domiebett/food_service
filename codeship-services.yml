@@ -1,5 +1,7 @@
 food_service:
-  build: ./tests/
+  build:
+    context: ./
+    dockerfile: Dockerfile-codeship
   links:
     - food_service_db
   cache: true
