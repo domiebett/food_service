@@ -17,7 +17,7 @@ export class Application {
     private port: number;
 
     constructor() {
-        this.port = config.get('express.port') || 0;
+        this.port = parseInt(process.env.APP_PORT);
         this.express = new ExpressConfig();
 
         this.setUpApplication();

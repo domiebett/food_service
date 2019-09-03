@@ -4,7 +4,7 @@ import { IpResolver } from '@bit/domiebett.budget_app.ip-resolver';
 
 export class EurekaService {
     private static _client: Eureka;
-    private static _port: number = config.get('express.port');
+    private static _port: number = parseInt(process.env.APP_PORT);
     private static _ipAddress: string = IpResolver.getIPv4Address();
 
     constructor() { }
@@ -13,8 +13,8 @@ export class EurekaService {
         if (!this._client) {
             this._client = new Eureka({
                 instance: {
-                    app: config.get('app.name'),
-                    instanceId: config.get('app.name'),
+                    app: process.env.APP_NAME,
+                    instanceId: process.env.APP_NAME,
                     hostName: this._ipAddress,
                     ipAddr: this._ipAddress,
                     statusPageUrl: `http://${this._ipAddress}:${this._port}`,
@@ -23,15 +23,15 @@ export class EurekaService {
                         '$': this._port,
                         '@enabled': true
                     },
-                    vipAddress: config.get('app.name'),
+                    vipAddress: process.env.APP_NAME,
                     dataCenterInfo: {
                         '@class': 'com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo',
                         'name': 'MyOwn'
                     },
                 },
                 eureka: {
-                    host: config.get('eureka.address') || 'eureka',
-                    port: config.get('eureka.port') || 9091,
+                    host: process.env.EUREKA_ADDRESS,
+                    port: parseInt(process.env.EUREKA_PORT),
                     servicePath: '/eureka/apps/'
                 }
             });
