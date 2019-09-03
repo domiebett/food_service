@@ -10,5 +10,3 @@ RUN npm install --silent
 COPY . /usr/src/app
 
 EXPOSE 3000
-
-RUN apt-get update && apt-get install -y mysql-client

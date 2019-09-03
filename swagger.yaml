@@ -1,0 +1,275 @@
+info:
+  title: Food Service
+  version: 1.0.0
+consumes:
+  - application/json
+produces:
+  - application/json
+swagger: '2.0'
+
+paths:
+# foods
+  /foods/:
+    get:
+      operationId: ListFoodItems
+      summary: list all available food items
+      responses:
+        200:
+          description: object containing array of food items
+          schema:
+            type: object
+            allOf:
+              - properties:
+                  foods:
+                    type: array
+                    items:
+                      $ref: '#/definitions/Food'
+    post:
+      operationId: CreateFoodItem
+      summary: create a food item
+      responses:
+        201:
+          description: object containing added food item
+          schema:
+            type: object
+            allOf:
+              - properties:
+                  food:
+                    type: object
+                    $ref: '#/definitions/Food'
+      parameters:
+        - in: body
+          name: food
+          description: the food item to create
+          schema:
+            $ref: '#/definitions/Food'
+  /foods/{foodId}:
+    get:
+      operationId: GetSingleFoodItem
+      summary: get a single food item
+      responses:
+        200:
+          description: object containing a food item
+          schema:
+            type: object
+            allOf:
+              - properties:
+                  food:
+                    type: object
+                    $ref: '#/definitions/Food'
+      parameters:
+        - $ref: '#/parameters/FoodId'
+    put:
+      operationId: UpdateSingleFoodItem
+      summary: update a single food item
+      responses:
+        201:
+          description: object containing a food item
+          schema:
+            type: object
+            allOf:
+             - properties:
+                 food:
+                  type: object
+                  $ref: '#/definitions/Food'
+      parameters:
+        - in: body
+          name: food
+          description: values for the food item to update
+          schema:
+            $ref: '#/definitions/Food'
+        - $ref: '#/parameters/FoodId'
+    delete:
+      operationId: DeleteSingleFoodItem
+      summary: delete a single food item
+      responses:
+        200:
+          description: message confirming success
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Pasta has been successfully deleted
+      parameters:
+        - $ref: '#/parameters/FoodId'
+  
+
+# meals
+  /meals/:
+    get:
+      operationId: ListAllMeals
+      summary: list all meals available
+      responses:
+        200:
+          description: object containing a list of meals
+          schema:
+            type: object
+            allOf:
+              - properties:
+                  meals:
+                    type: array
+                    items:
+                      $ref: '#/definitions/Meal'
+    post:
+      operationId: CreateMeal
+      summary: create a meal item
+      responses:
+        201:
+          description: object containing created meal
+          schema:
+            type: object
+            allOf:
+              - properties:
+                  meal:
+                    type: object
+                    $ref: '#/definitions/Meal'
+      parameters:
+        - in: body
+          name: meal
+          description: meal to create
+          schema:
+            $ref: '#/definitions/Meal'
+  /meals/{mealId}:
+    get:
+      operationId: GetSingleMeal
+      summary: get a single meal by id
+      responses:
+        200:
+          description: object containing a meal
+          schema:
+            type: object
+            allOf:
+              - properties:
+                  meal:
+                    type: object
+                    $ref: '#/definitions/Meal'
+      parameters:
+        - $ref: '#/parameters/MealId'
+    put:
+      operationId: UpdateMeal
+      summary: update a single meal
+      responses:
+        201:
+          description: object containing updated meal
+          schema:
+            type: object
+            allOf:
+              - properties:
+                  meal:
+                    type: object
+                    $ref: '#/definitions/Meal'
+      parameters:
+        - in: body
+          name: meal
+          description: meal to create
+          schema:
+            $ref: '#/definitions/Meal'
+        - $ref: '#/parameters/MealId'
+    delete:
+      operationId: DeleteMeal
+      summary: delete a meal
+      responses:
+        200:
+          description: confirmation message of successfull deletion
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Meal has been deleted successfully
+      parameters:
+        - $ref: '#/parameters/MealId'
+  #food in meals
+  /meals/{mealId}/foods:
+    post:
+      operationId: AddFoodToMeal
+      summary: add a food item to a meal
+      responses:
+        201:
+          description: meal that had food added to it.
+          schema:
+            type: object
+            allOf:
+              - properties:
+                  meal:
+                    type: object
+                    $ref: '#/definitions/Meal'
+      parameters:
+        - in: body
+          name: foods
+          type: array
+          example: [1, 2]
+        - $ref: '#/parameters/MealId'
+        - $ref: '#/parameters/FoodId'
+  
+  /meals/{mealId}/foods/{foodId}:
+    delete:
+      operationId: DeleteFoodFromMeal
+      summary: delete a food item from a meal
+      responses:
+        200:
+          description: message stating food has been removed successfully
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Pasta has been removed successfully
+      parameters:
+        - $ref: '#/parameters/MealId'
+        - $ref: '#/parameters/FoodId'
+
+# definitions
+definitions:
+  Food:
+    type: object
+    required:
+      - name
+      - type
+      - price
+    properties:
+      name:
+        description: name of the food item.
+        type: string
+        example: 'Pasta'
+      type:
+        description: type/category of the food item.
+        type: string
+        example: 'Protein'
+      price:
+        description: price of the food item
+        type: number
+        example: 20
+  Meal:
+    type: object
+    required:
+      - type
+    properties:
+      type:
+        description: type of the meal (Dinner, Breakfast, Lunch e.t.c)
+        type: string
+        example: Dinner
+      foods:
+        description: an array containing integer ids of food items
+        type: array
+        items:
+          type: integer
+        example: [1, 2]
+
+# parameters
+parameters:
+  FoodId:
+    name: foodId
+    in: path
+    description: id of a food item
+    type: integer
+    required: true
+    example: 1
+  MealId:
+    name: mealId
+    in: path
+    description: id of a food item
+    type: integer
+    required: true
+    example: 1

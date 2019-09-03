@@ -36,6 +36,7 @@
       "rimraf": "^2.7.1",
       "routing-controllers": "^0.7.7",
       "spdy": "^4.0.1",
+      "swagger-ui-express": "^4.0.7",
       "typedi": "^0.8.0",
       "typeorm": "0.2.18",
       "winston": "^3.2.1"
@@ -51,6 +52,8 @@
       "@types/mocha": "^5.2.7",
       "@types/node": "^8.10.51",
       "@types/spdy": "^3.4.4",
+      "@types/swagger-ui-express": "^3.0.1",
+      "@types/yamljs": "^0.2.30",
       "chai": "^4.2.0",
       "chai-as-promised": "^7.1.1",
       "mocha": "^6.2.0",
