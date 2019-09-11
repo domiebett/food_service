@@ -4,7 +4,7 @@ import * as cors from 'cors';
 import * as path from 'path';
 import * as YAML from 'yamljs';
 import * as swaggerUi from 'swagger-ui-express';
-import { useExpressServer, useContainer as routeUseContainer } from 'routing-controllers';
+import { useExpressServer, useContainer as routeUseContainer, Action } from 'routing-controllers';
 import { useContainer as ormUseContainer } from 'typeorm';
 import { Container } from 'typedi';
 
@@ -37,6 +37,12 @@ export class ExpressConfig {
             middlewares: [middlewaresPath + '/*.js'],
             cors: true,
             defaultErrorHandler: false,
+            authorizationChecker: async (action: Action) => {
+                return action.request.headers['user-id'];
+            },
+            currentUserChecker: async (action: Action) => {
+                return action.request.headers['user-id'];   
+            }
         });
     }
 
