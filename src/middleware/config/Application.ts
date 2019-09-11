@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as http2 from 'http2';
-import * as config from 'config';
 import { Connection } from 'typeorm';
 import { Eureka } from 'eureka-js-client';
 import { EurekaService } from './EurekaService';
