@@ -6,3 +6,4 @@ tmp/
 temp/certs
 certs
 .bit
+.env
