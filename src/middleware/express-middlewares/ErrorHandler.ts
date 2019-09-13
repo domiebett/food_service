@@ -10,8 +10,8 @@ export class ErrorHandler implements ExpressErrorMiddlewareInterface {
 
         if (error instanceof HttpError && error.httpCode) {
             responseObject.status = error.httpCode;
-            responseObject.message = this.httpErrorMessage(error.httpCode);
-            responseObject.name = this.httpErrorMessage(error.httpCode);
+            responseObject.message = this.httpErrorMessage(error.httpCode).message;
+            responseObject.name = this.httpErrorMessage(error.httpCode).name;
         } else {
             responseObject.name = error.name || 'Internal Server Error',
             responseObject.message = error.message || 'An error occured on our systems. We are working to fix this.';
@@ -38,13 +38,27 @@ export class ErrorHandler implements ExpressErrorMiddlewareInterface {
     private httpErrorMessage(httpErrorCode) {
         switch (httpErrorCode) {
             case 404 || '404':
-                return 'Resource not found.';
+                return {
+                    name: 'NotFoundError',
+                    message: 'The resource you are looking for was not found.'
+                }
                 break;
             case 500 || '500':
-                return 'Internal server error.';
+                return {
+                    name: 'InternalServerError',
+                    message: 'An error occured while processing your request. We apologise for any inconveniences.'
+                }
                 break;
+            case 401 || '401':
+                return {
+                    name: 'AuthorizationError',
+                    message: 'You are not authorized to perform this operation'
+                }
             default:
-                return 'Internal server error';
+                return {
+                    name: 'InternalServerError',
+                    message: 'An error occured while processing your request. We are working to fix this.'
+                };
                 break;
         }
     }
