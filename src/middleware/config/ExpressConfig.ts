@@ -32,9 +32,12 @@ export class ExpressConfig {
 
         const controllersPath = path.resolve('build', 'service-layer/controllers');
         const middlewaresPath = path.resolve('build', 'middleware/express-middlewares');
+        const interceptorsPath = path.resolve('build', 'middleware/interceptors');
+
         return useExpressServer(this.app, {
             controllers: [controllersPath + '/*.js'],
             middlewares: [middlewaresPath + '/*.js'],
+            interceptors: [interceptorsPath + '/*.js'],
             cors: true,
             defaultErrorHandler: false,
             authorizationChecker: async (action: Action) => {

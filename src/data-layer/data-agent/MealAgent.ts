@@ -14,8 +14,8 @@ export class MealAgent extends BaseAgent {
      * Get all meals
      * @return { Promise<Meal[]>}
      */
-    async getMeals(): Promise<Meal[]> {
-        return await this.mealRepository.find({ relations: ['foods']});
+    async getMeals(userId: number): Promise<Meal[]> {
+        return await this.mealRepository.find({ relations: ['foods'], where: { userId: userId }});
     }
 
     /**
@@ -23,8 +23,8 @@ export class MealAgent extends BaseAgent {
      * @param mealIds - the ids of the meals to retrieve
      * @return { Promise<Meal[]>}
      */
-    async getMealsWithIds(mealIds: number[]): Promise<Meal[]> {
-        return await this.mealRepository.findByIds(mealIds, { relations: ['foods']});
+    async getMealsWithIds(mealIds: number[], userId: number): Promise<Meal[]> {
+        return await this.mealRepository.findByIds(mealIds, { relations: ['foods'], where: { userId: userId} });
     }
 
     /**
@@ -33,13 +33,14 @@ export class MealAgent extends BaseAgent {
      * @param { Food[] } foods - array of food objects
      * @return { Promise<Meal> }
      */
-    async addMeal(requestBody, foods: Food[] = []): Promise<Meal> {
+    async addMeal(requestBody, userId: number, foods: Food[] = []): Promise<Meal> {
         const meal = new Meal();
         meal.type = requestBody.type;
         await this.validate(meal);
         
         if (foods && foods.length > 0) {
             meal.foods = foods;
+            meal.userId = userId;
         }
         
         return await this.mealRepository.save(meal);
@@ -52,10 +53,10 @@ export class MealAgent extends BaseAgent {
      * @param {Food[]} foods - food objects to replace
      * @return { Promise<Meal> }
      */
-    async updateMeal(mealId: number, requestBody: any, foods: Food[] = []): Promise<Meal> {
+    async updateMeal(mealId: number, requestBody: any, userId: number, foods: Food[] = []): Promise<Meal> {
         delete requestBody.foods;
 
-        const meal = await this.mealRepository.findOneOrFail(mealId);
+        const meal = await this.mealRepository.findOneOrFail(mealId, { where: { userId: userId}});
         
         for (let key in requestBody) {
             meal[key] = requestBody[key];
@@ -75,8 +76,8 @@ export class MealAgent extends BaseAgent {
      * @param foods - array of food objects
      * @return {Promise<Meal>}
      */
-    async addFoodToMeal(mealId: number, foods: Food[] = []): Promise<Meal> {
-        const meal = await this.mealRepository.findOneOrFail(mealId, { relations: ['foods']});
+    async addFoodToMeal(mealId: number, userId: number, foods: Food[] = []): Promise<Meal> {
+        const meal = await this.mealRepository.findOneOrFail(mealId, { relations: ['foods'], where: { userId: userId }});
 
         if (meal.foods && meal.foods.length > 0) {
             meal.foods.push(...foods);
@@ -92,8 +93,8 @@ export class MealAgent extends BaseAgent {
      * @param mealId - id of a meal
      * @return { Promise<Meal> }
      */
-    async getMeal(mealId: number): Promise<Meal> {
-        return await this.mealRepository.findOneOrFail(mealId, {relations: ['foods']});
+    async getMeal(mealId: number, userId: number): Promise<Meal> {
+        return await this.mealRepository.findOneOrFail(mealId, {relations: ['foods'], where: { userId: userId}});
     }
 
     /**
@@ -101,8 +102,8 @@ export class MealAgent extends BaseAgent {
      * @param mealId - id of a meal
      * @return {Promise<Meal>}
      */
-    async deleteMeal(mealId: number): Promise<Meal> {
-        const meal = await this.mealRepository.findOneOrFail(mealId);
+    async deleteMeal(mealId: number, userId: number): Promise<Meal> {
+        const meal = await this.mealRepository.findOneOrFail(mealId, { where: { userId: userId }});
         return await this.mealRepository.remove(meal);
     }
 
@@ -112,8 +113,8 @@ export class MealAgent extends BaseAgent {
      * @param food - a food to remove from a meal
      * @return { Promise<Meal> }
      */
-    async removeFoodFromMeal(mealId: number, food: Food): Promise<Meal> {
-        const meal = await this.mealRepository.findOneOrFail(mealId, {relations: ['foods']});
+    async removeFoodFromMeal(mealId: number, userId: number, food: Food): Promise<Meal> {
+        const meal = await this.mealRepository.findOneOrFail(mealId, {relations: ['foods'], where: { userId: userId}});
 
         const foodIndex = await this.indexOfFood(meal, food);
         if (foodIndex < 0) {
