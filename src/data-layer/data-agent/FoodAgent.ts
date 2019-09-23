@@ -25,8 +25,6 @@ export class FoodAgent extends BaseAgent {
         food.type = requestBody.type;
         food.userId = userId;
 
-        await this.validate(food);
-
         return await this.foodRepository.save(food);
     }
 
