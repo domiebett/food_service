@@ -1,15 +1,13 @@
 import { Meal, Food } from './../entity';
-import { getConnection, Repository } from 'typeorm';
-import { Validator } from '../../business-layer/validators';
-import { DatabaseConnectionService as DbConnectionService } from '../../business-layer/services';
+import { Repository } from 'typeorm';
+import { BaseAgent } from './BaseAgent';
 
-export class MealAgent {
+export class MealAgent extends BaseAgent {
     private mealRepository: Repository<Meal>;
-    private validate: Function;
 
     constructor() {
-        this.mealRepository = getConnection(DbConnectionService.getDbEnv()).getRepository(Meal);
-        this.validate = Validator.validate;
+        super();
+        this.mealRepository = this.getRepository(Meal);
     }
 
     /**

@@ -1,14 +1,16 @@
 import { getConnection, Repository } from 'typeorm';
 import { Food, IFood } from '../entity/Food';
+import { BaseAgent } from './BaseAgent';
 import { Validator } from '../../business-layer/validators';
 import { DatabaseConnectionService as DbConnectionService } from '../../business-layer/services';
-export class FoodAgent {
+import { AuthorizationError } from '@bit/domiebett.budget_app.jwt-authenticate';
+
+export class FoodAgent extends BaseAgent {
     private foodRepository: Repository<Food>;
-    private validate: Function;
 
     constructor() {
-        this.foodRepository = getConnection(DbConnectionService.getDbEnv()).getRepository(Food);
-        this.validate = Validator.validate;
+        super();
+        this.foodRepository = this.getRepository(Food);
     }
     
     /**
@@ -16,11 +18,12 @@ export class FoodAgent {
      * @param {IFood} requestBody - body provided in the request
      * @return {Promise<Food>}
      */
-    async addFood(requestBody: IFood): Promise<Food> {
+    async addFood(requestBody: IFood, userId: number): Promise<Food> {
         let food = new Food();
         food.name = requestBody.name;
         food.price = requestBody.price;
         food.type = requestBody.type;
+        food.userId = userId;
 
         await this.validate(food);
 
@@ -31,8 +34,8 @@ export class FoodAgent {
      * Get all foods in database
      * @return { Promise<Food> }
      */
-    async getAllFood(): Promise<Food[]> {
-        return await this.foodRepository.find();
+    async getAllFood(userId: number): Promise<Food[]> {
+        return await this.foodRepository.find({ where: { userId: userId }});
     }
 
     /**
@@ -40,8 +43,8 @@ export class FoodAgent {
      * @param {number} foodId - id of the food
      * @return { Promise<Food> }
      */
-    async getFoodById(foodId: number): Promise<Food> {
-        return await this.foodRepository.findOneOrFail(foodId);
+    async getFoodById(foodId: number, userId: number): Promise<Food> {
+        return await this.foodRepository.findOneOrFail(foodId, {where: { userId: userId }});
     }
 
     /**
@@ -49,8 +52,8 @@ export class FoodAgent {
      * @param {number} foodId - id of the food
      * @return { Promise<Food> }
      */
-    async deleteFood(foodId: number): Promise<Food> {
-        const food = await this.foodRepository.findOneOrFail(foodId);
+    async deleteFood(foodId: number, userId: number): Promise<Food> {
+        const food = await this.foodRepository.findOneOrFail(foodId, { where: { userId: userId }});
         return await this.foodRepository.remove(food);
     }
 
@@ -60,8 +63,8 @@ export class FoodAgent {
      * @param requestBody - body of a request
      * @return { Promise<Food> }
      */
-    async editFood(foodId: number, requestBody: any): Promise<Food> {
-        const food = await this.foodRepository.findOneOrFail(foodId);
+    async editFood(foodId: number, requestBody: any, userId: number): Promise<Food> {
+        const food = await this.foodRepository.findOneOrFail(foodId, { where: { userId: userId }});
 
         for(let key in requestBody) {
             food[key] = requestBody[key];
@@ -77,7 +80,7 @@ export class FoodAgent {
      * @param { number[] } foodIds - id of food
      * @return { Promise<Food> }
      */
-    async getFoodByIds(foodIds: number[]): Promise<Food[]> {
-        return await this.foodRepository.findByIds(foodIds);
+    async getFoodByIds(foodIds: number[], userId: number): Promise<Food[]> {
+        return await this.foodRepository.findByIds(foodIds, { where: { userId: userId }});
     }
 }
