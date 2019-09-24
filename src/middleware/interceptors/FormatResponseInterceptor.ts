@@ -6,7 +6,7 @@ export class FormatResponseInterceptor implements InterceptorInterface {
         if (content instanceof String)
             content = { message: content };
         else if (!content.error)
-            content = { data: content };
+            content = { data: content, success: true };
             
         return content;
     }

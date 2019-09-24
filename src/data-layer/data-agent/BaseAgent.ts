@@ -1,13 +1,12 @@
 import { getConnection, Repository } from 'typeorm';
 import { DatabaseConnectionService as DbConnectionService } from '../../business-layer/services/DatabaseConnectionService';
-import { Validator } from '../../business-layer/validators';
-import { Food, Meal } from '../entity';
+import { validate } from 'class-validator';
 
 export class BaseAgent {
     protected validate: Function;
 
     constructor() {
-        this.validate = Validator.validate;
+        this.validate = validate;
     }
 
     /**

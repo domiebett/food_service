@@ -1,6 +1,5 @@
 import { Middleware, ExpressErrorMiddlewareInterface, HttpError } from 'routing-controllers';
 import { Response } from 'express';
-import { ValidationException } from '../../business-layer/exceptions';
 
 @Middleware({ type: 'after' })
 export class ErrorHandler implements ExpressErrorMiddlewareInterface {
@@ -12,7 +11,7 @@ export class ErrorHandler implements ExpressErrorMiddlewareInterface {
             delete error.stack;
         }
 
-        const status = error.status || error.httpCode;
+        const status = error.status || (error.httpCode || 500);
         res.status(status).json(error);
 
         next(error);
