@@ -24,7 +24,7 @@
    "license": "ISC",
    "dependencies": {
       "@bit/domiebett.budget_app.ip-resolver": "^1.0.0",
-      "@bit/domiebett.budget_app.jwt-authenticate": "^1.1.0",
+      "@bit/domiebett.budget_app.jwt-authenticate": "^1.1.2",
       "@bit/domiebett.budget_app.logging": "^1.0.0",
       "body-parser": "^1.19.0",
       "config": "^3.2.2",
@@ -59,10 +59,10 @@
       "@types/yamljs": "^0.2.30",
       "chai": "^4.2.0",
       "chai-as-promised": "^7.1.1",
-      "mocha": "^6.2.0",
-      "nodemon": "^1.19.2",
+      "mocha": "^6.2.1",
+      "nodemon": "^1.19.3",
       "ts-node": "3.3.0",
-      "typescript": "^3.5.2"
+      "typescript": "^3.6.3"
    },
    "bit": {
       "env": {
