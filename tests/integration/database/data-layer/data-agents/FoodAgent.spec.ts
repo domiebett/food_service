@@ -6,7 +6,7 @@ import { IFood, FoodType } from '../../../../../src/data-layer/entity';
 import { Database } from '../../../../bin/setup/Database';
 import { Connection } from 'typeorm';
 
-const expect = chai.expect
+const expect = chai.expect;
 chai.use(chaiAsPromised);
 const correctRequestObj: IFood = {
     name: 'Sample Food',
@@ -26,7 +26,7 @@ describe('Food Agent', () => {
     });
 
     beforeEach(async () => {
-        result = await agent.addFood(correctRequestObj);
+        result = await agent.addFood(correctRequestObj, 1);
     });
 
     describe('Add Food', async () => {
@@ -38,19 +38,19 @@ describe('Food Agent', () => {
         });
 
         it('should not insert duplicate records', async () => {
-            expect(agent.addFood(correctRequestObj)).to.be.rejected;
+            expect(agent.addFood(correctRequestObj, 1)).to.be.rejected;
         });
 
         it('should reject invalid request obj name', async () => {
             let wrongRequestObj = Object.assign({}, correctRequestObj);
             wrongRequestObj.name = '';
-            expect(agent.addFood(wrongRequestObj)).to.be.rejected;
+            expect(agent.addFood(wrongRequestObj, 1)).to.be.rejected;
         });
     });
 
     describe('Get Food', async () => {
         it('should get all foods successfully', async () => {
-            const result = await agent.getAllFood();
+            const result = await agent.getAllFood(1);
             expect(result.length).to.be.equal(1);
             expect(result[0].id).to.be.equal(1);
             expect(result[0].name).to.be.equal(correctRequestObj.name);
@@ -59,7 +59,7 @@ describe('Food Agent', () => {
         });
 
         it('should get food by id', async () => {
-            const result = await agent.getFoodById(1);
+            const result = await agent.getFoodById(1, 1);
             expect(result).to.haveOwnProperty('id');
             expect(result.name).to.be.equal(correctRequestObj.name);
             expect(result.type).to.be.equal(correctRequestObj.type);
@@ -67,39 +67,39 @@ describe('Food Agent', () => {
         });
 
         it('shouldn\'t get food by non existent id', async () => {
-            expect(agent.getFoodById(1000)).to.be.rejected;
+            expect(agent.getFoodById(1000, 1)).to.be.rejected;
         });
     });
 
     describe('Delete Food', async () => {
         it('should delete food successfully', async () => {
-            const result = await agent.deleteFood(1);
+            const result = await agent.deleteFood(1, 1);
             expect(result.name).to.be.equal(correctRequestObj.name);
             expect(result.type).to.be.equal(correctRequestObj.type);
             expect(result.price).to.be.equal(correctRequestObj.price);
         });
 
         it('should reject deletion by wrong id', () => {
-            expect(agent.deleteFood(1000)).to.be.rejected;
+            expect(agent.deleteFood(1000, 1)).to.be.rejected;
         });
     });
 
     describe('Update Food', async() => {
         it('should update food successfully', async () => {
-            let result = await agent.editFood(1, {name: 'Second Sample'});
+            let result = await agent.editFood(1, {name: 'Second Sample'}, 1);
             expect(result.id).to.be.equal(1);
             expect(result.name).to.be.equal('Second Sample');
             expect(result.type).to.be.equal(correctRequestObj.type);
 
-            result = await agent.editFood(1, {type: FoodType.Drink});
+            result = await agent.editFood(1, {type: FoodType.Drink}, 1);
             expect(result.type).to.be.equal(FoodType.Drink);
 
-            result = await agent.editFood(1, { price: 500});
+            result = await agent.editFood(1, { price: 500}, 1);
             expect(result.price).to.be.equal(500);
         });
 
         it('should reject update with invalid request body', async () => {
-            expect(agent.editFood(1, {name: ''})).to.be.rejected;
+            expect(agent.editFood(1, {name: ''}, 1)).to.be.rejected;
         });
     });
 
