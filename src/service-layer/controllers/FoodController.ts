@@ -9,26 +9,26 @@ export class FoodController {
 
     @Authorized()
     @Get()
-    async getAllFoods(@CurrentUser() currentUser: IUser, @Req() req: Request, @Res() res: Response) {
+    async getAllFoods(@CurrentUser() currentUser: IUser) {
         return await this.foodAgent.getAllFood(currentUser.id);
     }
 
     @Authorized()
     @HttpCode(201)
     @Post()
-    async addFood(@CurrentUser() currentUser: IUser, @Body({ validate: true }) requestBody: Food, @Req() req: Request, @Res() res: Response) {
+    async addFood(@CurrentUser() currentUser: IUser, @Body({ validate: true }) requestBody: Food) {
         return await this.foodAgent.addFood(requestBody, currentUser.id);
     }
 
     @Authorized()
     @Get('/:foodId')
-    async getFoodById(@CurrentUser() currentUser: IUser, @Param('foodId') foodId: number, @Req() req: Request, @Res() res: Response) {
+    async getFoodById(@CurrentUser() currentUser: IUser, @Param('foodId') foodId: number) {
         return await this.foodAgent.getFoodById(foodId, currentUser.id);
     }
 
     @Authorized()
     @Delete('/:foodId')
-    async deleteFood(@CurrentUser() currentUser: IUser, @Param('foodId') foodId: number, @Req() req: Request, @Res() res: Response) {
+    async deleteFood(@CurrentUser() currentUser: IUser, @Param('foodId') foodId: number) {
         const food = await this.foodAgent.deleteFood(foodId, currentUser.id);
         return { message: `${food.name} was deleted successfully` };
     }
@@ -36,7 +36,7 @@ export class FoodController {
     @Authorized()
     @HttpCode(201)
     @Put('/:foodId')
-    async editFood(@CurrentUser() currentUser: IUser, @Param('foodId') foodId: number, @Body() requestBody: any, @Res() res: Response) {
+    async editFood(@CurrentUser() currentUser: IUser, @Param('foodId') foodId: number, @Body() requestBody: any) {
         return await this.foodAgent.editFood(foodId, requestBody, currentUser.id);
     }
 }

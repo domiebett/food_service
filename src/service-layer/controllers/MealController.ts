@@ -12,7 +12,7 @@ export class MealController {
 
     @Authorized()
     @Get()
-    async getAllMeals(@CurrentUser() currentUser: IUser, @QueryParam('mealIds') mealIds: string, @Res() res: Response) {
+    async getAllMeals(@CurrentUser() currentUser: IUser, @QueryParam('mealIds') mealIds: string) {
         if (mealIds) {
             let ids = mealIds.split(',').map((id) => parseInt(id));
             return await this.mealAgent.getMealsWithIds(ids, currentUser.id);
@@ -23,7 +23,7 @@ export class MealController {
     @Authorized()
     @HttpCode(201)
     @Post()
-    async addMeal(@CurrentUser() currentUser: IUser, @Body() requestBody, @Res() res: Response) {
+    async addMeal(@CurrentUser() currentUser: IUser, @Body() requestBody) {
         requestBody.type = MealType[requestBody.type];
         const foods = await this.foodAgent.getFoodByIds(requestBody.foods || [], currentUser.id);
         return await this.mealAgent.addMeal(requestBody, currentUser.id, foods);
@@ -31,14 +31,14 @@ export class MealController {
 
     @Authorized()
     @Get('/:mealId')
-    async getSingleMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number, @Res() res: Response) {
+    async getSingleMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number) {
         return await this.mealAgent.getMeal(mealId, currentUser.id);
     }
 
     @Authorized()
     @HttpCode(201)
     @Put('/:mealId')
-    async updateMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number, @Body() requestBody, @Res() res: Response) {
+    async updateMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number, @Body() requestBody) {
         const foods = await this.foodAgent.getFoodByIds(requestBody.foods || [], currentUser.id);
         return await this.mealAgent.updateMeal(mealId, requestBody, currentUser.id, foods);
     }
@@ -46,21 +46,21 @@ export class MealController {
     @Authorized()
     @HttpCode(201)
     @Post('/:mealId/foods')
-    async addFoodToMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number, @Body() requestBody, @Res() res: Response) {
+    async addFoodToMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number, @Body() requestBody) {
         const foods = await this.foodAgent.getFoodByIds(requestBody.foods || [], currentUser.id);
         return await this.mealAgent.addFoodToMeal(mealId, currentUser.id, foods);
     }
 
     @Authorized()
     @Delete('/:mealId')
-    async deleteMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number, @Res() res: Response) {
+    async deleteMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number) {
         const meal = await this.mealAgent.deleteMeal(mealId, currentUser.id);
         return { message: 'Meal has been deleted successfully' };
     }
 
     @Authorized()
     @Delete('/:mealId/foods/:foodId')
-    async removeFoodFromMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number, @Param('foodId') foodId: number, @Res() res: Response) {
+    async removeFoodFromMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number, @Param('foodId') foodId: number) {
         const food = await this.foodAgent.getFoodById(foodId, currentUser.id);
         return await this.mealAgent.removeFoodFromMeal(mealId, currentUser.id, food);
     }
