@@ -50,7 +50,7 @@ describe('Food Agent', () => {
 
     describe('Get Food', async () => {
         it('should get all foods successfully', async () => {
-            const result = await agent.getAllFood(1);
+            const result = await agent.getAll(1);
             expect(result.length).to.be.equal(1);
             expect(result[0].id).to.be.equal(1);
             expect(result[0].name).to.be.equal(correctRequestObj.name);
@@ -59,7 +59,7 @@ describe('Food Agent', () => {
         });
 
         it('should get food by id', async () => {
-            const result = await agent.getFoodById(1, 1);
+            const result = await agent.getById(1, 1);
             expect(result).to.haveOwnProperty('id');
             expect(result.name).to.be.equal(correctRequestObj.name);
             expect(result.type).to.be.equal(correctRequestObj.type);
@@ -67,20 +67,20 @@ describe('Food Agent', () => {
         });
 
         it('shouldn\'t get food by non existent id', async () => {
-            expect(agent.getFoodById(1000, 1)).to.be.rejected;
+            expect(agent.getById(1000, 1)).to.be.rejected;
         });
     });
 
     describe('Delete Food', async () => {
         it('should delete food successfully', async () => {
-            const result = await agent.deleteFood(1, 1);
+            const result = await agent.destroy(1, 1);
             expect(result.name).to.be.equal(correctRequestObj.name);
             expect(result.type).to.be.equal(correctRequestObj.type);
             expect(result.price).to.be.equal(correctRequestObj.price);
         });
 
         it('should reject deletion by wrong id', () => {
-            expect(agent.deleteFood(1000, 1)).to.be.rejected;
+            expect(agent.destroy(1000, 1)).to.be.rejected;
         });
     });
 

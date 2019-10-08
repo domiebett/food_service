@@ -1,6 +1,5 @@
 import { JsonController, Get, Req, Res, Post, Param, Body, Delete, Put, Authorized, CurrentUser, HttpCode, OnUndefined } from 'routing-controllers';
-import { FoodAgent } from '../../data-layer/data-agent/FoodAgent';
-import { Request, Response } from 'express';
+import { FoodAgent } from '../../data-layer/data-agent';
 import { Food, IUser } from '../../data-layer/entity';
 
 @JsonController('/foods')
@@ -10,7 +9,7 @@ export class FoodController {
     @Authorized()
     @Get()
     async getAllFoods(@CurrentUser() currentUser: IUser) {
-        return await this.foodAgent.getAllFood(currentUser.id);
+        return await this.foodAgent.getAll(currentUser.id);
     }
 
     @Authorized()
@@ -23,13 +22,13 @@ export class FoodController {
     @Authorized()
     @Get('/:foodId')
     async getFoodById(@CurrentUser() currentUser: IUser, @Param('foodId') foodId: number) {
-        return await this.foodAgent.getFoodById(foodId, currentUser.id);
+        return await this.foodAgent.getById(foodId, currentUser.id);
     }
 
     @Authorized()
     @Delete('/:foodId')
     async deleteFood(@CurrentUser() currentUser: IUser, @Param('foodId') foodId: number) {
-        const food = await this.foodAgent.deleteFood(foodId, currentUser.id);
+        const food = await this.foodAgent.destroy(foodId, currentUser.id);
         return { message: `${food.name} was deleted successfully` };
     }
 

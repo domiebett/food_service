@@ -56,7 +56,8 @@ describe('Meal Agent', () => {
         it('should get all meals', async () => {
             let food = await foodAgent.addFood(foodRequestObj, 1);
             await agent.addMeal(correctRequestObj, 1, [food]);
-            let result = await agent.getMeals(1);
+            let result = await agent.getAll(1, ['foods']);
+
             expect(result.length).to.be.equal(1);
             expect(result[0].type).to.be.equal(correctRequestObj.type);
             expect(result[0].id).to.be.equal(1);
@@ -66,20 +67,20 @@ describe('Meal Agent', () => {
         it('should get single meal with id', async () => {
             let food = await foodAgent.addFood(foodRequestObj, 1);
             await agent.addMeal(correctRequestObj, 1, [food]);
-            let result = await agent.getMeal(1, 1);
+            let result = await agent.getById(1, 1, ['foods']);
             expect(result.type).to.be.equal(correctRequestObj.type);
             expect(result.foods[0].name).to.be.equal(foodRequestObj.name);
         });
 
         it('should reject wrong id', async () => {
-            expect(agent.getMeal(1000, 1)).to.be.rejected;
+            expect(agent.getById(1000, 1)).to.be.rejected;
         });
 
         it('should get meals with ids', async () => {
             await agent.addMeal(correctRequestObj, 1);
             await agent.addMeal(correctRequestObj, 1);
             await agent.addMeal(correctRequestObj, 1);
-            let result = await agent.getMealsWithIds([1, 3], 1);
+            let result = await agent.getByIds([1, 3], 1);
             expect(result.length).to.be.equal(2);
             expect(result[1].id).to.be.equal(3);
         });
@@ -104,13 +105,13 @@ describe('Meal Agent', () => {
     describe('Delete Meal', async () => {
         it('should delete a meal', async () => {
             await agent.addMeal(correctRequestObj, 1);
-            let result = await agent.deleteMeal(1, 1);
+            let result = await agent.destroy(1, 1);
             expect(result.type).to.be.equal(correctRequestObj.type);
-            expect(agent.getMeal(1, 1)).to.be.rejected;
+            expect(agent.getById(1, 1)).to.be.rejected;
         });
 
         it('should reject deletion for wrong id', async () => {
-            expect(agent.deleteMeal(1000, 1)).to.be.rejected;
+            expect(agent.destroy(1000, 1)).to.be.rejected;
         });
     });
 
@@ -132,7 +133,7 @@ describe('Meal Agent', () => {
 
             it('no duplicate food should exist on meal', async () => {
                 await agent.addFoodToMeal(1, 1, [food]);
-                let result = await agent.getMeal(1, 1);
+                let result = await agent.getById(1, 1, ['foods']);
                 expect(result.foods.length).to.be.equal(1);
             });
         });

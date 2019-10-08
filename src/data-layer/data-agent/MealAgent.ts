@@ -1,34 +1,10 @@
-import { Meal, Food } from './../entity';
-import { Repository } from 'typeorm';
+import { Meal, Food } from '../entity';
 import { BaseAgent } from './BaseAgent';
 import { Catch } from '../../business-layer/decorators/CatchError';
 
 export class MealAgent extends BaseAgent {
-    private mealRepository: Repository<Meal>;
-
     constructor() {
-        super();
-        this.mealRepository = this.getRepository(Meal);
-    }
-
-    /**
-     * Get all meals
-     * @return { Promise<Meal[]>}
-     */
-    @Catch()
-    async getMeals(userId: number): Promise<Meal[]> {
-        return await this.mealRepository.find({ relations: ['foods'], where: { userId: userId }});
-    }
-
-    /**
-     * Get multiple meals using their ids
-     * @param mealIds - the ids of the meals to retrieve
-     * @param userId
-     * @return { Promise<Meal[]>}
-     */
-    @Catch()
-    async getMealsWithIds(mealIds: number[], userId: number): Promise<Meal[]> {
-        return await this.mealRepository.findByIds(mealIds, { relations: ['foods'], where: { userId: userId} });
+        super(Meal);
     }
 
     /**
@@ -49,7 +25,7 @@ export class MealAgent extends BaseAgent {
             meal.foods = foods;
         }
         
-        return await this.mealRepository.save(meal);
+        return await this.repository.save(meal);
     }
 
     /**
@@ -64,7 +40,7 @@ export class MealAgent extends BaseAgent {
     async updateMeal(mealId: number, requestBody: any, userId: number, foods: Food[] = []): Promise<Meal> {
         delete requestBody.foods;
 
-        const meal: Meal = await this.mealRepository.findOneOrFail(mealId, { where: { userId: userId}});
+        const meal = <Meal> await this.getById(mealId, userId);
         
         for (let key in requestBody) {
             if (await meal.hasOwnProperty(key))
@@ -76,7 +52,7 @@ export class MealAgent extends BaseAgent {
             meal.foods = foods;
         }
 
-        return await this.mealRepository.save(meal);
+        return await this.repository.save(meal);
     }
 
     /**
@@ -88,7 +64,7 @@ export class MealAgent extends BaseAgent {
      */
     @Catch()
     async addFoodToMeal(mealId: number, userId: number, foods: Food[] = []): Promise<Meal> {
-        const meal = await this.mealRepository.findOneOrFail(mealId, { relations: ['foods'], where: { userId: userId }});
+        const meal = <Meal> await this.getById(mealId, userId, ['foods']);
 
         if (meal.foods && meal.foods.length > 0) {
             meal.foods.push(...foods);
@@ -96,30 +72,7 @@ export class MealAgent extends BaseAgent {
             meal.foods = foods;
         }
 
-        return await this.mealRepository.save(meal);
-    }
-
-    /**
-     * Get a meal
-     * @param mealId - id of a meal
-     * @param userId
-     * @return { Promise<Meal> }
-     */
-    @Catch()
-    async getMeal(mealId: number, userId: number): Promise<Meal> {
-        return await this.mealRepository.findOneOrFail(mealId, {relations: ['foods'], where: { userId: userId}});
-    }
-
-    /**
-     * Delete a meal
-     * @param mealId - id of a meal
-     * @param userId
-     * @return {Promise<Meal>}
-     */
-    @Catch()
-    async deleteMeal(mealId: number, userId: number): Promise<Meal> {
-        const meal = await this.mealRepository.findOneOrFail(mealId, { where: { userId: userId }});
-        return await this.mealRepository.remove(meal);
+        return await this.repository.save(meal);
     }
 
     /**
@@ -131,7 +84,7 @@ export class MealAgent extends BaseAgent {
      */
     @Catch()
     async removeFoodFromMeal(mealId: number, userId: number, food: Food): Promise<Meal> {
-        const meal = await this.mealRepository.findOneOrFail(mealId, {relations: ['foods'], where: { userId: userId}});
+        const meal = <Meal> await this.getById(mealId, userId, ['foods']);
 
         const foodIndex = await this.indexOfFood(meal, food);
         if (foodIndex < 0) {
@@ -139,7 +92,7 @@ export class MealAgent extends BaseAgent {
         }
         
         await meal.foods.splice(foodIndex, 1);
-        return await this.mealRepository.save(meal);
+        return await this.repository.save(meal);
     }
 
     /**
