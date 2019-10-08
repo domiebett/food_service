@@ -1,7 +1,6 @@
-import { JsonController, Get, Req, Res, Post, Param, Body, Delete, Put, Authorized } from 'routing-controllers';
-import { FoodAgent } from '../../data-layer/data-agent/FoodAgent';
-import { Request, Response } from 'express';
-import { IFood, FoodType } from '../../data-layer/entity/Food';
+import { JsonController, Get, Req, Res, Post, Param, Body, Delete, Put, Authorized, CurrentUser, HttpCode, OnUndefined } from 'routing-controllers';
+import { FoodAgent } from '../../data-layer/data-agent';
+import { Food, IUser } from '../../data-layer/entity';
 
 @JsonController('/foods')
 export class FoodController {
@@ -9,41 +8,34 @@ export class FoodController {
 
     @Authorized()
     @Get()
-    async getAllFoods(@Req() req: Request, @Res() res: Response) {
-        const allFoods: IFood[] = await this.foodAgent.getAllFood();
-
-        return res.status(200).json({ foods: allFoods });
+    async getAllFoods(@CurrentUser() currentUser: IUser) {
+        return await this.foodAgent.getAll(currentUser.id);
     }
 
     @Authorized()
+    @HttpCode(201)
     @Post()
-    async addFood(@Body() requestBody: IFood, @Req() req: Request, @Res() res: Response) {
-        const food = await this.foodAgent.addFood(requestBody);
-
-        return res.status(201).json({ food: food });
+    async addFood(@CurrentUser() currentUser: IUser, @Body({ validate: true }) requestBody: Food) {
+        return await this.foodAgent.addFood(requestBody, currentUser.id);
     }
 
     @Authorized()
     @Get('/:foodId')
-    async getFoodById(@Param('foodId') foodId: number, @Req() req: Request, @Res() res: Response) {
-        const food = await this.foodAgent.getFoodById(foodId);
-
-        return res.status(200).json({ food: food });
+    async getFoodById(@CurrentUser() currentUser: IUser, @Param('foodId') foodId: number) {
+        return await this.foodAgent.getById(foodId, currentUser.id);
     }
 
     @Authorized()
     @Delete('/:foodId')
-    async deleteFood(@Param('foodId') foodId: number, @Req() req: Request, @Res() res: Response) {
-        const food = await this.foodAgent.deleteFood(foodId);
-
-        return res.status(200).json({ message: `${food.name} was successfully deleted`});
+    async deleteFood(@CurrentUser() currentUser: IUser, @Param('foodId') foodId: number) {
+        const food = await this.foodAgent.destroy(foodId, currentUser.id);
+        return { message: `${food.name} was deleted successfully` };
     }
 
     @Authorized()
+    @HttpCode(201)
     @Put('/:foodId')
-    async editFood(@Param('foodId') foodId: number, @Body() requestBody: any, @Res() res: Response) {
-        const food = await this.foodAgent.editFood(foodId, requestBody);
-
-        return res.status(201).json({ food: food });
+    async editFood(@CurrentUser() currentUser: IUser, @Param('foodId') foodId: number, @Body() requestBody: any) {
+        return await this.foodAgent.editFood(foodId, requestBody, currentUser.id);
     }
 }
