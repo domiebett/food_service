@@ -23,6 +23,7 @@ export class MealAgent extends BaseAgent {
     /**
      * Get multiple meals using their ids
      * @param mealIds - the ids of the meals to retrieve
+     * @param userId
      * @return { Promise<Meal[]>}
      */
     @Catch()
@@ -33,6 +34,7 @@ export class MealAgent extends BaseAgent {
     /**
      * Add meals. Can also add foods on creation of meals
      * @param requestBody - body of a request
+     * @param userId - id for the current user
      * @param { Food[] } foods - array of food objects
      * @return { Promise<Meal> }
      */
@@ -40,11 +42,11 @@ export class MealAgent extends BaseAgent {
     async addMeal(requestBody, userId: number, foods: Food[] = []): Promise<Meal> {
         const meal = new Meal();
         meal.type = requestBody.type;
+        meal.userId = userId;
         await this.validate(meal);
         
         if (foods && foods.length > 0) {
             meal.foods = foods;
-            meal.userId = userId;
         }
         
         return await this.mealRepository.save(meal);
@@ -54,6 +56,7 @@ export class MealAgent extends BaseAgent {
      * Updates attributes. If new foods are provided, it over writes the original.
      * @param {number}mealId - id of a meal
      * @param requestBody - body of a request
+     * @param userId
      * @param {Food[]} foods - food objects to replace
      * @return { Promise<Meal> }
      */
@@ -61,10 +64,11 @@ export class MealAgent extends BaseAgent {
     async updateMeal(mealId: number, requestBody: any, userId: number, foods: Food[] = []): Promise<Meal> {
         delete requestBody.foods;
 
-        const meal = await this.mealRepository.findOneOrFail(mealId, { where: { userId: userId}});
+        const meal: Meal = await this.mealRepository.findOneOrFail(mealId, { where: { userId: userId}});
         
         for (let key in requestBody) {
-            meal[key] = requestBody[key];
+            if (await meal.hasOwnProperty(key))
+                meal[key] = requestBody[key];
         }
         await this.validate(meal);
 
@@ -78,6 +82,7 @@ export class MealAgent extends BaseAgent {
     /**
      * Add foods to a meal
      * @param mealId - id of a meal
+     * @param userId
      * @param foods - array of food objects
      * @return {Promise<Meal>}
      */
@@ -97,6 +102,7 @@ export class MealAgent extends BaseAgent {
     /**
      * Get a meal
      * @param mealId - id of a meal
+     * @param userId
      * @return { Promise<Meal> }
      */
     @Catch()
@@ -107,6 +113,7 @@ export class MealAgent extends BaseAgent {
     /**
      * Delete a meal
      * @param mealId - id of a meal
+     * @param userId
      * @return {Promise<Meal>}
      */
     @Catch()
@@ -118,6 +125,7 @@ export class MealAgent extends BaseAgent {
     /**
      * Remove single food from a meal
      * @param mealId - id of a meal
+     * @param userId
      * @param food - a food to remove from a meal
      * @return { Promise<Meal> }
      */
