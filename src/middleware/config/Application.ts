@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as http2 from 'http2';
-import * as config from 'config';
 import { Connection } from 'typeorm';
 import { Eureka } from 'eureka-js-client';
 import { EurekaService } from './EurekaService';
@@ -17,7 +16,7 @@ export class Application {
     private port: number;
 
     constructor() {
-        this.port = config.get('express.port') || 0;
+        this.port = parseInt(process.env.APP_PORT);
         this.express = new ExpressConfig();
 
         this.setUpApplication();

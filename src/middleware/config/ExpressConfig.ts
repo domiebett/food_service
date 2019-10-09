@@ -2,9 +2,14 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser'
 import * as cors from 'cors';
 import * as path from 'path';
-import { useExpressServer, useContainer as routeUseContainer } from 'routing-controllers';
+import * as YAML from 'yamljs';
+import * as swaggerUi from 'swagger-ui-express';
+import * as jwt from '@bit/domiebett.budget_app.jwt-authenticate';
+import { useExpressServer, useContainer as routeUseContainer, Action } from 'routing-controllers';
 import { useContainer as ormUseContainer } from 'typeorm';
 import { Container } from 'typedi';
+
+const swaggerDocument = YAML.load(path.resolve('swagger.yaml'));
 
 export class ExpressConfig {
     app: express.Application;
@@ -14,7 +19,8 @@ export class ExpressConfig {
         this.app.use(cors());
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false }));
-        this.app = this.setUpExpressServer();
+        this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+        this.setUpExpressServer();
         this.errorHandler();
     }
 
@@ -27,11 +33,22 @@ export class ExpressConfig {
 
         const controllersPath = path.resolve('build', 'service-layer/controllers');
         const middlewaresPath = path.resolve('build', 'middleware/express-middlewares');
+        const interceptorsPath = path.resolve('build', 'middleware/interceptors');
+
         return useExpressServer(this.app, {
             controllers: [controllersPath + '/*.js'],
             middlewares: [middlewaresPath + '/*.js'],
+            interceptors: [interceptorsPath + '/*.js'],
             cors: true,
             defaultErrorHandler: false,
+            authorizationChecker: async (action: Action) => {
+                const token = await jwt.getToken(action.request);
+                return jwt.isValidToken(token);
+            },
+            currentUserChecker: async (action: Action) => {
+                const token = await jwt.getToken(action.request);
+                return jwt.getCurrentUser(token);
+            }
         });
     }
 

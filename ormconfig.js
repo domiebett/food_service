@@ -1,10 +1,10 @@
 module.exports = {
    "type": "mysql",
-   "host": process.env.DATABASE_HOST || 'food_service_db',
-   "port": process.env.DATABASE_PORT || 3306,
-   "username": process.env.DATABASE_USER || 'root',
-   "password": process.env.DATABASE_PASSWORD || 'food_service_password',
-   "database": process.env.DATABASE_NAME || 'food_service',
+   "host": process.env.DATABASE_HOST,
+   "port": process.env.DATABASE_PORT,
+   "username": process.env.DATABASE_USER,
+   "password": process.env.DATABASE_PASSWORD,
+   "database": process.env.DATABASE_NAME,
    "synchronize": true,
    "logging": false,
    "entities": [

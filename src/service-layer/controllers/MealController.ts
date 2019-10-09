@@ -1,7 +1,7 @@
-import { JsonController, Get, Res, Post, Body, Put, Param, QueryParam, Delete } from 'routing-controllers';
+import { JsonController, Get, Res, Post, Body, Put, Param, QueryParam, Delete, Authorized, CurrentUser, HttpCode } from 'routing-controllers';
 import { Response } from 'express';
 import { MealAgent, FoodAgent } from '../../data-layer/data-agent';
-import { MealType } from '../../data-layer/entity';
+import {MealType, IUser, Food} from '../../data-layer/entity';
 
 @JsonController('/meals')
 export class MealController {
@@ -10,64 +10,58 @@ export class MealController {
         private foodAgent: FoodAgent
     ) { }
 
+    @Authorized()
     @Get()
-    async getAllMeals(@QueryParam('mealIds') mealIds: string, @Res() res: Response) {
-        let meals = [];
+    async getAllMeals(@CurrentUser() currentUser: IUser, @QueryParam('mealIds') mealIds: string) {
         if (mealIds) {
             let ids = mealIds.split(',').map((id) => parseInt(id));
-            meals = await this.mealAgent.getMealsWithIds(ids);
-        } else {
-            meals = await this.mealAgent.getMeals();
+            return await this.mealAgent.getByIds(ids, currentUser.id, ['foods']);
         }
-        return res.status(200).json({ meals });
+        return await this.mealAgent.getAll(currentUser.id);
     }
 
+    @Authorized()
+    @HttpCode(201)
     @Post()
-    async addMeal(@Body() requestBody, @Res() res: Response) {
+    async addMeal(@CurrentUser() currentUser: IUser, @Body() requestBody) {
         requestBody.type = MealType[requestBody.type];
-        const foods = await this.foodAgent.getFoodByIds(requestBody.foods || []);
-        const meal = await this.mealAgent.addMeal(requestBody, foods);
-
-        return res.status(201).json({ meal });
+        const foods = <Food[]> await this.foodAgent.getByIds(requestBody.foods || [], currentUser.id);
+        return await this.mealAgent.addMeal(requestBody, currentUser.id, foods);
     }
 
+    @Authorized()
     @Get('/:mealId')
-    async getSingleMeal(@Param('mealId') mealId: number, @Res() res: Response) {
-        const meal = await this.mealAgent.getMeal(mealId);
-
-        return res.status(200).json({ meal });
+    async getSingleMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number) {
+        return await this.mealAgent.getById(mealId, currentUser.id, ['foods']);
     }
 
+    @Authorized()
+    @HttpCode(201)
     @Put('/:mealId')
-    async updateMeal(@Param('mealId') mealId: number, @Body() requestBody, @Res() res: Response) {
-        const foods = await this.foodAgent.getFoodByIds(requestBody.foods || []);
-        const meal = await this.mealAgent.updateMeal(mealId, requestBody, foods);
-
-        return res.status(201).json({ meal });
+    async updateMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number, @Body() requestBody) {
+        const foods = <Food[]> await this.foodAgent.getByIds(requestBody.foods || [], currentUser.id);
+        return await this.mealAgent.updateMeal(mealId, requestBody, currentUser.id, foods);
     }
 
+    @Authorized()
+    @HttpCode(201)
     @Post('/:mealId/foods')
-    async addFoodToMeal(@Param('mealId') mealId: number, @Body() requestBody, @Res() res: Response) {
-        const foods = await this.foodAgent.getFoodByIds(requestBody.foods || []);
-        const meal = await this.mealAgent.addFoodToMeal(mealId, foods);
-
-        return res.status(201).json({ meal });
+    async addFoodToMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number, @Body() requestBody) {
+        const foods = <Food[]> await this.foodAgent.getByIds(requestBody.foods || [], currentUser.id);
+        return await this.mealAgent.addFoodToMeal(mealId, currentUser.id, foods);
     }
 
+    @Authorized()
     @Delete('/:mealId')
-    async deleteMeal(@Param('mealId') mealId: number, @Res() res: Response) {
-        const meal = await this.mealAgent.deleteMeal(mealId);
-        const message = 'Meal has been deleted successfully';
-
-        return res.status(200).json({ message });
+    async deleteMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number) {
+        const meal = await this.mealAgent.destroy(mealId, currentUser.id);
+        return { message: 'Meal has been deleted successfully' };
     }
 
+    @Authorized()
     @Delete('/:mealId/foods/:foodId')
-    async removeFoodFromMeal(@Param('mealId') mealId: number, @Param('foodId') foodId: number, @Res() res: Response) {
-        const food = await this.foodAgent.getFoodById(foodId);
-        const meal = await this.mealAgent.removeFoodFromMeal(mealId, food);
-        const message = `${food.name} has been removed successfully`;
-
-        return res.status(200).json({ meal, message });
+    async removeFoodFromMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number, @Param('foodId') foodId: number) {
+        const food = await this.foodAgent.getById(foodId, currentUser.id);
+        return await this.mealAgent.removeFoodFromMeal(mealId, currentUser.id, food);
     }
 }

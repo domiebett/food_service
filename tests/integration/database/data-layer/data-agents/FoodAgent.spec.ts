@@ -2,12 +2,12 @@ import 'mocha';
 import chai = require('chai');
 import * as chaiAsPromised from 'chai-as-promised';
 import { FoodAgent } from '../../../../../src/data-layer/data-agent';
-import { IFood, FoodType } from '../../../../../src/data-layer/entity';
+import { FoodType } from '../../../../../src/data-layer/entity';
 import { Database } from '../../../../bin/setup/Database';
 import { Connection } from 'typeorm';
 import * as FoodData from '../../../../bin/data/FoodData';
 
-const expect = chai.expect
+const expect = chai.expect;
 chai.use(chaiAsPromised);
 
 describe('Food Agent', () => {
@@ -22,7 +22,7 @@ describe('Food Agent', () => {
     });
 
     beforeEach(async () => {
-        result = await agent.addFood(FoodData.foodObj);
+        result = await agent.addFood(FoodData.foodObj, 1);
     });
 
     describe('Add Food', async () => {
@@ -34,17 +34,17 @@ describe('Food Agent', () => {
         });
 
         it('should not insert duplicate records', async () => {
-            expect(agent.addFood(FoodData.foodObj)).to.be.rejected;
+            expect(agent.addFood(FoodData.foodObj, 1)).to.be.rejected;
         });
 
         it('should reject invalid request obj name', async () => {
-            expect(agent.addFood(FoodData.emptyFoodNameObj)).to.be.rejected;
+            expect(agent.addFood(FoodData.emptyFoodNameObj, 1)).to.be.rejected;
         });
     });
 
     describe('Get Food', async () => {
         it('should get all foods successfully', async () => {
-            const result = await agent.getAllFood();
+            const result = await agent.getAll(1);
             expect(result.length).to.be.equal(1);
             expect(result[0].id).to.be.equal(1);
             expect(result[0].name).to.be.equal(FoodData.foodObj.name);
@@ -53,7 +53,7 @@ describe('Food Agent', () => {
         });
 
         it('should get food by id', async () => {
-            const result = await agent.getFoodById(1);
+            const result = await agent.getById(1, 1);
             expect(result).to.haveOwnProperty('id');
             expect(result.name).to.be.equal(FoodData.foodObj.name);
             expect(result.type).to.be.equal(FoodData.foodObj.type);
@@ -61,39 +61,39 @@ describe('Food Agent', () => {
         });
 
         it('shouldn\'t get food by non existent id', async () => {
-            expect(agent.getFoodById(1000)).to.be.rejected;
+            expect(agent.getById(1000, 1)).to.be.rejected;
         });
     });
 
     describe('Delete Food', async () => {
         it('should delete food successfully', async () => {
-            const result = await agent.deleteFood(1);
+            const result = await agent.destroy(1, 1);
             expect(result.name).to.be.equal(FoodData.foodObj.name);
             expect(result.type).to.be.equal(FoodData.foodObj.type);
             expect(result.price).to.be.equal(FoodData.foodObj.price);
         });
 
         it('should reject deletion by wrong id', () => {
-            expect(agent.deleteFood(1000)).to.be.rejected;
+            expect(agent.destroy(1000, 1)).to.be.rejected;
         });
     });
 
     describe('Update Food', async() => {
         it('should update food successfully', async () => {
-            let result = await agent.editFood(1, {name: 'Second Sample'});
+            let result = await agent.editFood(1, {name: 'Second Sample'}, 1);
             expect(result.id).to.be.equal(1);
             expect(result.name).to.be.equal('Second Sample');
             expect(result.type).to.be.equal(FoodData.foodObj.type);
 
-            result = await agent.editFood(1, {type: FoodType.Drink});
+            result = await agent.editFood(1, {type: FoodType.Drink}, 1);
             expect(result.type).to.be.equal(FoodType.Drink);
 
-            result = await agent.editFood(1, { price: 500});
+            result = await agent.editFood(1, { price: 500}, 1);
             expect(result.price).to.be.equal(500);
         });
 
         it('should reject update with invalid request body', async () => {
-            expect(agent.editFood(1, {name: ''})).to.be.rejected;
+            expect(agent.editFood(1, {name: ''}, 1)).to.be.rejected;
         });
     });
 

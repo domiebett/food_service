@@ -33,6 +33,9 @@ export class Food {
 
     @ManyToMany(type => Meal, meal => meal.foods)
     meals: Meal[];
+
+    @Column('integer')
+    userId: number;
 }
 
 export interface IFood {

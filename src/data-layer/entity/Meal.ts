@@ -21,6 +21,9 @@ export class Meal {
     @IsIn(Object.values(MealType))
     type: MealType;
 
+    @Column('integer')
+    userId: number;
+
     @ManyToMany(type => Food, food => food.meals)
     @JoinTable()
     foods: Food[];
