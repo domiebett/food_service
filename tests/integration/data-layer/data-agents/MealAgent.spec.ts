@@ -1,9 +1,9 @@
 import 'mocha';
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { MealAgent, FoodAgent } from '../../../../../src/data-layer/data-agent';
-import { MealType, FoodType } from '../../../../../src/data-layer/entity';
-import { Database } from '../../../../bin/setup/Database';
+import { MealAgent, FoodAgent } from '../../../../src/data-layer/data-agent';
+import { MealType, FoodType } from '../../../../src/data-layer/entity';
+import { Database } from '../../../bin/setup/Database';
 import { Connection } from 'typeorm';
 
 const expect = chai.expect;
@@ -34,7 +34,7 @@ describe('Meal Agent', () => {
             let result = await agent.addMeal(correctRequestObj, 1);
             expect(result.id).to.be.equal(1);
             expect(result.type).to.be.equal(correctRequestObj.type);
-            expect(result.foods).to.be.undefined;
+            expect(result.foods).to.have.lengthOf(0);
         });
 
         it('should add meal with food successfully', async () => {

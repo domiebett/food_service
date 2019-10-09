@@ -19,12 +19,12 @@ export class MealAgent extends BaseAgent {
         const meal = new Meal();
         meal.type = requestBody.type;
         meal.userId = userId;
-        await this.validate(meal);
-        
+        meal.foods = [];
+
         if (foods && foods.length > 0) {
             meal.foods = foods;
         }
-        
+
         return await this.repository.save(meal);
     }
 
@@ -40,13 +40,15 @@ export class MealAgent extends BaseAgent {
     async updateMeal(mealId: number, requestBody: any, userId: number, foods: Food[] = []): Promise<Meal> {
         delete requestBody.foods;
 
-        const meal = <Meal> await this.getById(mealId, userId);
+        const meal = <Meal> await this.fetchOne(mealId, userId);
         
         for (let key in requestBody) {
             if (await meal.hasOwnProperty(key))
                 meal[key] = requestBody[key];
         }
-        await this.validate(meal);
+        const errors = await this.validate(meal);
+        if (errors.length > 0)
+            throw errors;
 
         if (foods && foods.length > 0) {
             meal.foods = foods;

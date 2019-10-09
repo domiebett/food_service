@@ -14,10 +14,7 @@ export class Meal {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({
-        type: 'varchar',
-        length: '20'
-    })
+    @Column('text')
     @IsIn(Object.values(MealType))
     type: MealType;
 
@@ -27,4 +24,6 @@ export class Meal {
     @ManyToMany(type => Food, food => food.meals)
     @JoinTable()
     foods: Food[];
+
+    foodIds: number[];
 }
