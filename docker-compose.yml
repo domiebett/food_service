@@ -6,8 +6,6 @@ services:
     restart: always
     ports:
       - "3001:3000"
-    depends_on:
-      - food_service_db
     command: npm run dev
     environment:
       DATABASE_HOST: ${DATABASE_HOST}
@@ -18,22 +16,6 @@ services:
     volumes:
       - ./:/usr/src/app
       - /usr/src/app/node_modules
-    networks:
-      - budget_app_network
-  food_service_db:
-    container_name: food_service_db
-    image: mysql:8.0
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: food_service_password
-      MYSQL_DATABASE: food_service
-      MYSQL_USER: test
-      MYSQL_PASSWORD: test
-    ports:
-      - "3307:3306"
-    volumes:
-      - "./docker/provision/mysql/init:/docker-entrypoint-initdb.d"
     networks:
       - budget_app_network
 networks:

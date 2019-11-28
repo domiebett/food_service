@@ -1,4 +1,3 @@
-import { Repository } from 'typeorm';
 import { Food, IFood } from '../entity';
 import { BaseAgent } from './BaseAgent';
 import { Catch } from '../../business-layer/decorators/CatchError';

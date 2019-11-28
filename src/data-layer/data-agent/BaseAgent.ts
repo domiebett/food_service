@@ -35,6 +35,8 @@ export abstract class BaseAgent {
 
     /**
      * Get single entity by id
+     * NOTE: Dont use this to fetch a single meal in other methods, please
+     * use the below `fetchOne` method.
      * @param id
      * @param userId
      * @param relations
@@ -42,7 +44,7 @@ export abstract class BaseAgent {
      */
     @Catch()
     async getById(id, userId, relations: string[] = null): Promise<any> {
-        return this.repository.findOneOrFail(id, {where: { userId }, relations });
+        return this.fetchOne(id, userId, relations);
     }
 
     /**
@@ -53,7 +55,7 @@ export abstract class BaseAgent {
      */
     @Catch()
     async destroy(id, userId): Promise<any> {
-        const item = await this.getById(id, userId);
+        const item = await this.fetchOne(id, userId);
         return this.repository.remove(item);
     }
 
@@ -67,5 +69,29 @@ export abstract class BaseAgent {
     @Catch()
     async getByIds(ids: number[], userId, relations: string[] = null) {
         return this.repository.findByIds(ids, { where: { userId }, relations });
+    }
+
+    /**
+     * Fetch a single record.
+     * @param id
+     * @param userId
+     * @param relations
+     */
+    protected async fetchOne(id: number, userId: number, relations: string[] = null) {
+        return this.repository.findOneOrFail(id, {where: { userId }, relations })
+    }
+
+    /**
+     * Assign properties to an object
+     * @param obj 
+     * @param properties 
+     */
+    protected async assignPropertiesToObject(obj, properties: object) {
+        for (let key in properties) {
+            if (await obj.hasOwnProperty(key))
+                obj[key] = properties[key];
+        }
+
+        return obj;
     }
 }

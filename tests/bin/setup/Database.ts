@@ -1,5 +1,6 @@
-import { createConnection, getConnection, Connection } from "typeorm";
+import { createConnection, Connection } from "typeorm";
 import { Food, Meal } from "../../../src/data-layer/entity";
+import * as path from 'path';
 
 export class Database {
     constructor() {
@@ -20,7 +21,11 @@ export class Database {
             username: 'test',
             password: 'test',
             database: 'test',
-            entities: [Food, Meal],
+            entities: [
+                Food, Meal,
+                path.resolve('src', 'data-layer/entity/**/*.ts'),
+                path.resolve('build', 'data-layer/entity/**/*.js')
+            ],
             synchronize: true
         });
     }

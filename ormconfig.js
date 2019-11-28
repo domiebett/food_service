@@ -21,4 +21,4 @@ module.exports = {
       "migrationsDir": "src/data-layer/migration",
       "subscribersDir": "src/data-layer/subscriber"
    }
-}
+};
