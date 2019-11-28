@@ -40,12 +40,9 @@ export class MealAgent extends BaseAgent {
     async updateMeal(mealId: number, requestBody: any, userId: number, foods: Food[] = []): Promise<Meal> {
         delete requestBody.foods;
 
-        const meal = <Meal> await this.fetchOne(mealId, userId);
-        
-        for (let key in requestBody) {
-            if (await meal.hasOwnProperty(key))
-                meal[key] = requestBody[key];
-        }
+        let meal = <Meal> await this.fetchOne(mealId, userId);
+        meal = await this.assignPropertiesToObject(meal, requestBody);
+
         const errors = await this.validate(meal);
         if (errors.length > 0)
             throw errors;

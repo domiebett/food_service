@@ -80,4 +80,18 @@ export abstract class BaseAgent {
     protected async fetchOne(id: number, userId: number, relations: string[] = null) {
         return this.repository.findOneOrFail(id, {where: { userId }, relations })
     }
+
+    /**
+     * Assign properties to an object
+     * @param obj 
+     * @param properties 
+     */
+    protected async assignPropertiesToObject(obj, properties: object) {
+        for (let key in properties) {
+            if (await obj.hasOwnProperty(key))
+                obj[key] = properties[key];
+        }
+
+        return obj;
+    }
 }
