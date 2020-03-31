@@ -1,11 +1,9 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import * as http2 from 'http2';
 import { Connection } from 'typeorm';
 import { Eureka } from 'eureka-js-client';
 import { EurekaService } from './EurekaService';
 import { ExpressConfig } from './ExpressConfig';
-import { Connector } from '../../data-layer/adapters/Connector';
+import { Database } from '../../data-layer/adapters/Database';
 import { logger } from '@bit/domiebett.budget_app.logging';
 
 export class Application {
@@ -39,7 +37,7 @@ export class Application {
      */
     private async createDatabaseConnection() {
         await logger.info('Creating database connection...');
-        return await Connector.connect();
+        return await Database.connect();
     }
 
     /**
@@ -60,29 +58,7 @@ export class Application {
      * Registers to Eureka
      */
     private async setUpEureka() {
-        const client: Eureka = EurekaService.getClient();
-        await logger.info('Connecting to eureka...');
-
-        await client.start((error: Error) => {
-            if (error && !error.message) {
-                if (!error.message) error.message = 'Error connecting to eureka server!!';
-                logger.error('Eureka Connection Error: ', error.message);
-                throw error;
-            }
-        });
-
-        return await client;
-    }
-
-    /**
-     * Get the ssl key and certificate
-     */
-    private async fetchSslConfigFiles() {
-        const certsPath = path.resolve('certs');
-        return await {
-            key: fs.readFileSync(certsPath + '/server.key'),
-            cert: fs.readFileSync(certsPath + '/server.crt')
-        };
+        return EurekaService.start();
     }
 
     /**
