@@ -1,5 +1,6 @@
 import { Eureka } from 'eureka-js-client';
 import { IpResolver } from '@bit/domiebett.budget_app.ip-resolver';
+import { logger } from '@bit/domiebett.budget_app.logging';
 
 export class EurekaService {
     private static _client: Eureka;
@@ -33,11 +34,27 @@ export class EurekaService {
                 eureka: {
                     host: process.env.EUREKA_ADDRESS,
                     port: parseInt(process.env.EUREKA_PORT),
-                    servicePath: '/eureka/apps/'
+                    servicePath: '/eureka/apps/',
+                    maxRetries: parseInt(process.env.EUREKA_MAX_RETRIES)
                 }
             });
         }
 
         return this._client;
+    }
+
+    static async start() {
+        const client: Eureka = EurekaService.getClient();
+        await logger.info('Connecting to eureka...');
+
+        await client.start((error: Error) => {
+            if (error && !error.message) {
+                if (!error.message) error.message = 'Error connecting to eureka server!!';
+                logger.error('Eureka Connection Error: ', error.message);
+                throw error;
+            }
+        });
+
+        return await client;
     }
 }

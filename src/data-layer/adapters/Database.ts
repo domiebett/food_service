@@ -1,8 +1,8 @@
 import { createConnection } from 'typeorm';
 
-export class Connector {
+export class Database {
     constructor() {
-        Connector.connect();
+        Database.connect();
     }
 
     /**
