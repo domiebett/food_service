@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import * as http2 from 'http2';
 import { Connection } from 'typeorm';
 import { Eureka } from 'eureka-js-client';
@@ -61,17 +59,6 @@ export class Application {
      */
     private async setUpEureka() {
         return EurekaService.start();
-    }
-
-    /**
-     * Get the ssl key and certificate
-     */
-    private async fetchSslConfigFiles() {
-        const certsPath = path.resolve('certs');
-        return await {
-            key: fs.readFileSync(certsPath + '/server.key'),
-            cert: fs.readFileSync(certsPath + '/server.crt')
-        };
     }
 
     /**

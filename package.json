@@ -8,8 +8,8 @@
       "clean": "rimraf build",
       "compile": "tsc",
       "compile_dev": "tsc -w",
-      "start": "npm run clean && npm run compile && pm2-runtime start build/index.js",
-      "dev": "nodemon -e ts --ignore \"./tests\" --exec \"npm run start\"",
+      "start": "npm run clean && npm run compile && node build/index.js",
+      "dev": "nodemon",
       "test": "mocha --timeout 15000 -r ts-node/register tests/**/*.spec.ts",
       "unit_test": "mocha -r ts-node/register tests/unit/**/*.spec.ts",
       "integration_test": "mocha -r ts-node/register tests/integration/**/*.spec.ts",
@@ -74,5 +74,12 @@
       },
       "componentsDefaultDirectory": "components/{name}",
       "packageManager": "npm"
+   },
+   "nodemonConfig": {
+      "ignore": [ "tests/*", "node_modules", ".git" ],
+      "watch": [ "src/*" ],
+      "exec": "npm start",
+      "ext": "ts",
+      "delay": "2500"
    }
 }
