@@ -1,7 +1,6 @@
 import { JsonController, Get, Res, Post, Body, Put, Param, QueryParam, Delete, Authorized, CurrentUser, HttpCode } from 'routing-controllers';
-import { Response } from 'express';
 import { MealAgent, FoodAgent } from '../../data-layer/data-agent';
-import {MealType, IUser, Food, Meal} from '../../data-layer/entity';
+import {MealType, IUser, Food, IMeal} from '../../data-layer/entity';
 
 @JsonController('/meals')
 export class MealController {
@@ -23,8 +22,12 @@ export class MealController {
     @Authorized()
     @HttpCode(201)
     @Post()
-    async addMeal(@CurrentUser() currentUser: IUser, @Body({ validate: true }) requestBody: Meal) {
-        requestBody.type = MealType[requestBody.type];
+    async addMeal(@CurrentUser() currentUser: IUser, @Body() requestBody: IMeal) {
+        // default to dinner.
+        requestBody.type = requestBody.type || MealType.DINNER;
+        // make sure meal is in MealType enum
+        requestBody.type = MealType[requestBody.type.toUpperCase()];
+
         const foods = <Food[]> await this.foodAgent.getByIds(requestBody.foodIds || [], currentUser.id);
         return await this.mealAgent.addMeal(requestBody, currentUser.id, foods);
     }
@@ -46,6 +49,7 @@ export class MealController {
     @HttpCode(201)
     @Put('/:mealId')
     async updateMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number, @Body() requestBody) {
+        requestBody.type = MealType[requestBody.type.toUpperCase()];
         const foods = <Food[]> await this.foodAgent.getByIds(requestBody.foodIds || [], currentUser.id);
         return await this.mealAgent.updateMeal(mealId, requestBody, currentUser.id, foods);
     }

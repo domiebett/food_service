@@ -1,5 +1,4 @@
 import { DuplicateEntryError, ResourceNotFoundError, BaseError } from "../exceptions";
-import { ValidationError as ValidationException } from 'class-validator';
 import { ValidationError } from '../exceptions';
 
 const ERROR_CODES = {

@@ -1,3 +1,3 @@
 export { Food, IFood } from './Food';
-export { Meal, MealType } from './Meal';
+export { Meal, MealType, IMeal } from './Meal';
 export { IUser } from './User';

@@ -1,6 +1,7 @@
-import { Meal, Food } from '../entity';
+import { Meal, Food, MealType } from '../entity';
 import { BaseAgent } from './BaseAgent';
 import { Catch } from '../../business-layer/decorators/CatchError';
+import { validate } from 'class-validator';
 
 export class MealAgent extends BaseAgent {
     constructor() {
@@ -25,6 +26,8 @@ export class MealAgent extends BaseAgent {
             meal.foods = foods;
         }
 
+        await this.validateMeal(meal);
+
         return await this.repository.save(meal);
     }
 
@@ -43,9 +46,7 @@ export class MealAgent extends BaseAgent {
         let meal = <Meal> await this.fetchOne(mealId, userId);
         meal = await this.assignPropertiesToObject(meal, requestBody);
 
-        const errors = await this.validate(meal);
-        if (errors.length > 0)
-            throw errors;
+        await this.validateMeal(meal);
 
         if (foods && foods.length > 0) {
             meal.foods = foods;
@@ -109,5 +110,14 @@ export class MealAgent extends BaseAgent {
         }
 
         return -1;
+    }
+
+    private async validateMeal(meal: Meal) {
+        const errors = await validate(meal);
+
+        if (errors.length > 0) {
+            throw errors;
+        }
+        return true;
     }
 }

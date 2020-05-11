@@ -3,10 +3,12 @@ import { Food } from './Food';
 import { IsIn } from 'class-validator';
 
 export enum MealType {
-    Dinner = 'Dinner',
-    Lunch = 'Lunch',
-    Breakfast = 'Breakfast',
-    Snack = 'Snack'
+    DINNER = 'dinner',
+    LUNCH = 'lunch',
+    BREAKFAST = 'breakfast',
+    SNACK = 'snack',
+    SUPPER = 'supper',
+    BRUNCH = 'brunch'
 }
 
 @Entity()
@@ -26,4 +28,12 @@ export class Meal {
     foods: Food[];
 
     foodIds: number[];
+}
+
+export interface IMeal {
+    id?: number,
+    type: MealType,
+    userId?: number,
+    foods?: Food[],
+    foodIds?: number[]
 }
