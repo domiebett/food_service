@@ -7,3 +7,4 @@ temp/certs
 certs
 .bit
 .env
+.nyc_output/

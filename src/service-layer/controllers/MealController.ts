@@ -36,6 +36,13 @@ export class MealController {
     }
 
     @Authorized()
+    @Get('/:mealId/foods')
+    async getFoodsInMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number, @Body() requestBody) {
+        const meal = await this.mealAgent.getById(mealId, currentUser.id, ['foods']);
+        return meal.foods;
+    }
+
+    @Authorized()
     @HttpCode(201)
     @Put('/:mealId')
     async updateMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number, @Body() requestBody) {
