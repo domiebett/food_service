@@ -71,7 +71,7 @@ describe('Meal Routes Integration Tests', () => {
             let response = await request.post('/meals', MealData.invalidTypeMealObj);
             expect(response.status).to.equal(400);
             expect(response.body.name).to.equal('BadRequestError');
-            expect(response.body.errors.field).to.equal('type');
+            expect(response.body.errors[0].field).to.equal('type');
         });
     });
 
@@ -81,16 +81,16 @@ describe('Meal Routes Integration Tests', () => {
         });
 
         it('should edit a meal successfully', async () => {
-            let response = await request.put('/meals/1', {type: 'Breakfast'});
+            let response = await request.put('/meals/1', {type: 'breakfast'});
             expect(response.status).to.equal(201);
-            expect(response.body.data.type).to.equal('Breakfast');
+            expect(response.body.data.type).to.equal('breakfast');
         });
 
         it('should reject wrong meal type on edit', async () => {
             let response = await request.put('/meals/1', {type: 'Wrong'});
             expect(response.status).to.equal(400);
             expect(response.body.name).to.equal('BadRequestError');
-            expect(response.body.errors.field).to.equal('type');
+            expect(response.body.errors[0].field).to.equal('type');
         });
 
         it('should reject editing nonexistent meal', async () => {
