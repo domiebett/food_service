@@ -56,13 +56,6 @@ describe('Food Routes Integration Tests', () => {
             expect(response.body.data.name).to.equal(FoodData.foodObj2.name);
         });
 
-        it('should reject wrong food type', async () => {
-            const response = await request.post('/foods', FoodData.wrongFoodTypeObj);
-            expect(response.status).to.equal(400);
-            expect(response.body.name).to.equal('BadRequestError');
-            expect(response.body.errors[0].constraints).to.haveOwnProperty('isIn');
-        });
-
         it('should reject empty food name', async () => {
             const response = await request.post('/foods', FoodData.emptyFoodNameObj);
             expect(response.status).to.equal(400);
@@ -85,13 +78,6 @@ describe('Food Routes Integration Tests', () => {
             const response = await request.put('/foods/1', FoodData.emptyFoodNameObj);
             expect(response.status).to.equal(400);
             expect(response.body.errors[0].constraints).to.haveOwnProperty('minLength');
-        });
-
-        it('should reject wrong food type', async () => {
-            const response = await request.put('/foods/1', FoodData.wrongFoodTypeObj);
-            expect(response.status).to.equal(400);
-            expect(response.body.name).to.equal('BadRequestError');
-            expect(response.body.errors[0].constraints).to.haveOwnProperty('isIn');
         });
     });
 

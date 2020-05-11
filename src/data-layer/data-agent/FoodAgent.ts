@@ -17,8 +17,6 @@ export class FoodAgent extends BaseAgent {
     async addFood(requestBody: IFood, userId: number): Promise<Food> {
         let food = new Food();
         food.name = requestBody.name;
-        food.price = requestBody.price;
-        food.type = requestBody.type;
         food.userId = userId;
 
         return await this.repository.save(food);

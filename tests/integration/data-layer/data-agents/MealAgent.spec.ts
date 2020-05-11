@@ -2,7 +2,7 @@ import 'mocha';
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { MealAgent, FoodAgent } from '../../../../src/data-layer/data-agent';
-import { MealType, FoodType } from '../../../../src/data-layer/entity';
+import { MealType } from '../../../../src/data-layer/entity';
 import { Database } from '../../../bin/setup/Database';
 import { Connection } from 'typeorm';
 
@@ -13,8 +13,6 @@ const correctRequestObj = {
 }
 const foodRequestObj = {
     name: 'Sample Food',
-    type: FoodType.Starch,
-    price: 50
 };
 
 describe('Meal Agent', () => {
@@ -145,7 +143,7 @@ describe('Meal Agent', () => {
             });
 
             it('should reject removing food that isn\'t in meal', async () => {
-                let otherFood = await foodAgent.addFood({type: FoodType.Protein, name: 'Sample', price: 20}, 1);
+                let otherFood = await foodAgent.addFood({ name: 'Sample' }, 1);
                 expect(agent.removeFoodFromMeal(1, 1, otherFood)).to.be.rejected;
             });
         });
