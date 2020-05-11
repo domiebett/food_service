@@ -1,7 +1,7 @@
 # Food Service
 
 [![Codeship Status for domiebett/food_service](https://app.codeship.com/projects/78afb390-a73c-0137-2f32-5ae24cfcc022/status?branch=develop)](https://app.codeship.com/projects/361206)
-[![Maintainability](https://api.codeclimate.com/v1/badges/d28bc8f619894f8fe92d/maintainability)](https://codeclimate.com/github/domiebett/food_service/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/09b24d8687359cbc9e11/maintainability)](https://codeclimate.com/github/domiebett/food_service/maintainability)
 
 This is a service designed to keep a repository of all foods and their prices. It is intended to help create meals and evaluate their total price.
 
