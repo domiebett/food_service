@@ -49,7 +49,7 @@ export class MealController {
     @HttpCode(201)
     @Put('/:mealId')
     async updateMeal(@CurrentUser() currentUser: IUser, @Param('mealId') mealId: number, @Body() requestBody) {
-        requestBody.type = MealType[requestBody.type.toUpperCase()];
+        requestBody.type = MealType[requestBody.type?.toUpperCase()];
         const foods = <Food[]> await this.foodAgent.getByIds(requestBody.foodIds || [], currentUser.id);
         return await this.mealAgent.updateMeal(mealId, requestBody, currentUser.id, foods);
     }

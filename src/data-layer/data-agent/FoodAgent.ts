@@ -1,6 +1,7 @@
 import { Food, IFood } from '../entity';
 import { BaseAgent } from './BaseAgent';
 import { Catch } from '../../business-layer/decorators/CatchError';
+import { validate } from 'class-validator';
 
 export class FoodAgent extends BaseAgent {
     constructor() {
@@ -18,6 +19,11 @@ export class FoodAgent extends BaseAgent {
         let food = new Food();
         food.name = requestBody.name;
         food.userId = userId;
+
+        let errors = await validate(food);
+        if (errors.length > 0) {
+            throw errors;
+        }
 
         return await this.repository.save(food);
     }

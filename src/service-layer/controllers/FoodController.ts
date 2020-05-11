@@ -1,6 +1,6 @@
 import { JsonController, Get, Req, Res, Post, Param, Body, Delete, Put, Authorized, CurrentUser, HttpCode, OnUndefined } from 'routing-controllers';
 import { FoodAgent } from '../../data-layer/data-agent';
-import { Food, IUser } from '../../data-layer/entity';
+import { Food, IUser, IFood } from '../../data-layer/entity';
 
 @JsonController('/foods')
 export class FoodController {
@@ -15,7 +15,7 @@ export class FoodController {
     @Authorized()
     @HttpCode(201)
     @Post()
-    async addFood(@CurrentUser() currentUser: IUser, @Body({ validate: true }) requestBody: Food) {
+    async addFood(@CurrentUser() currentUser: IUser, @Body() requestBody: IFood) {
         return await this.foodAgent.addFood(requestBody, currentUser.id);
     }
 

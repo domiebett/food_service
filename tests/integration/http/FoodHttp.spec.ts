@@ -59,7 +59,7 @@ describe('Food Routes Integration Tests', () => {
         it('should reject empty food name', async () => {
             const response = await request.post('/foods', FoodData.emptyFoodNameObj);
             expect(response.status).to.equal(400);
-            expect(response.body.errors[0].constraints).to.haveOwnProperty('minLength');
+            expect(response.body.errors[0].field).to.equal('name');
         });
     });
 
@@ -77,7 +77,7 @@ describe('Food Routes Integration Tests', () => {
         it('should reject empty food name', async () => {
             const response = await request.put('/foods/1', FoodData.emptyFoodNameObj);
             expect(response.status).to.equal(400);
-            expect(response.body.errors[0].constraints).to.haveOwnProperty('minLength');
+            expect(response.body.errors[0].field).to.equal('name');
         });
     });
 
