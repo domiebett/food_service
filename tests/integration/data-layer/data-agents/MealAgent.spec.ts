@@ -9,7 +9,7 @@ import { Connection } from 'typeorm';
 const expect = chai.expect;
 chai.use(chaiAsPromised);
 const correctRequestObj = {
-    type: MealType.Dinner,
+    type: MealType.DINNER,
 }
 const foodRequestObj = {
     name: 'Sample Food',
@@ -88,9 +88,9 @@ describe('Meal Agent', () => {
         it('should update meal successfully', async () => {
             await agent.addMeal(correctRequestObj, 1);
             let food = await foodAgent.addFood(foodRequestObj, 1);
-            let result = await agent.updateMeal(1, {type: MealType.Breakfast}, 1, [food]);
+            let result = await agent.updateMeal(1, {type: MealType.BREAKFAST}, 1, [food]);
             expect(result.id).to.be.equal(1);
-            expect(result.type).to.be.equal(MealType.Breakfast);
+            expect(result.type).to.be.equal(MealType.BREAKFAST);
             expect(result.foods.length).to.be.equal(1);
             expect(result.foods[0].name).to.be.equal(foodRequestObj.name);
         });
